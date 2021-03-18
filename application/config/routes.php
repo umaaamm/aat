@@ -56,4 +56,7 @@ $route['translate_uri_dashes'] = FALSE;
 
 //Admin
 $route['kelola_admin'] = 'AdminController';
+$route['simpan_admin'] = 'AdminController/saveSuperAdmin';
+
+
 

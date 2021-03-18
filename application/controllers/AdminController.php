@@ -18,9 +18,32 @@ class AdminController extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
+
 	public function index()
 	{
+		$data['dataSuperAdmin'] = $this->db->query("select * from tbl_user")->result_array();;
 		$data['content']='module/Admin/admin';
 		$this->load->view('layout/master',$data);
+	}
+
+	public function saveSuperAdmin(){
+		$data['nama']=$this->input->post("nama");
+		$data['email']=$this->input->post("email");
+		$data['no_hp']=$this->input->post("no_hp");
+		$data['password']=$this->input->post("password");
+		$data['alamat']=$this->input->post("alamat");;
+		$data['role']=1;
+
+		$simpan = $this->BaseModel->TambahData('tbl_user', $data);
+
+		if (!$simpan) {
+			$this->session->set_flashdata("notif","<div class='alert alert-danger'>Data Gagal di simpan</div>");
+			header('location:'.base_url().'kelola_admin');
+			return;
+		}
+
+		$this->session->set_flashdata("notif","<div class='alert alert-success'>Data berhasil di simpan</div>");
+		header('location:'.base_url().'kelola_admin');
+		return;
 	}
 }
