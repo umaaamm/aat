@@ -18,10 +18,9 @@
                     <li><a href="dashboard-02.html">Ecommerce</a></li>
                 </ul>
                 </li>
-                <li class="dropdown"><a class="nav-link menu-title" href="#"><i data-feather="airplay"></i><span>Widgets</span></a>
+                <li class="dropdown"><a class="nav-link menu-title" href="#"><i data-feather="airplay"></i><span>Manajemen Admin</span></a>
                 <ul class="nav-submenu menu-content">
-                    <li><a href="general-widget.html">General</a></li>
-                    <li><a href="chart-widget.html">Chart</a></li>
+                    <li><a href="<? echo base_url()?>kelola_admin">Kelola Admin</a></li>
                 </ul>
                 </li>
                 <li class="dropdown"><a class="nav-link menu-title" href="#"><i data-feather="box"></i><span>Ui Kits</span></a>
