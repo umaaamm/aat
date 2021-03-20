@@ -6,7 +6,7 @@
 class BaseModel extends CI_Model
 {
 	
-	function TambahData($table,$data){
+	function insertData($table,$data){
 		$query = $this->db->insert($table,$data);
 		if (!$query) {
 			return false;
@@ -19,10 +19,10 @@ class BaseModel extends CI_Model
 	function HapusData($table,$data){
 		$this->db->delete($table,$data);
 	}
-	function TampilData($table){
+	function getAllData($table){
 		return $this->db->get($table);
 	}
-	function cek_login($table,$where){		
-		return $this->db->get_where($table,$where);
+	function getWhere($table,$where,$limit){		
+		return $this->db->get_where($table,$where,$limit);
 	}
 }

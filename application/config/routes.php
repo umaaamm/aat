@@ -49,13 +49,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'DashboardController';
+$route['default_controller'] = 'auth';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+//Home
+$route['home'] = 'home';
 
 //Admin
 $route['kelola_admin'] = 'AdminController';
+$route['kelola_super_admin'] = 'kelola_super_admin';
 $route['simpan_admin'] = 'AdminController/saveSuperAdmin';
 
 
