@@ -31,5 +31,18 @@
     <script src="<?php echo base_url();?>/assets/js/theme-customizer/customizer.js"></script>
     <!-- login js-->
     <!-- Plugin used-->
+    <script src="<?php echo base_url();?>/assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
+    <script src="<?php echo base_url();?>/assets/js/datatable/datatables/datatable.custom.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            window.setTimeout(function() {
+                $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
+                    $(this).remove();
+                });
+            }, 1000);
+        });
+    </script>
+
   </body>
 </html>
