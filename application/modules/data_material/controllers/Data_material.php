@@ -14,6 +14,7 @@ class Data_material extends MY_Controller {
 
     public function index()
     {
+        // $this->createNoSurat("SSM","BJ");
         $data['dataSatuan'] = $this->getSatuanMaterial();
         $data['dataMaterial'] = $this->getMaterial();
         $data['content']='v_data_material';
