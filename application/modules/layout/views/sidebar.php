@@ -25,9 +25,9 @@
                 </li>
                 <li class="dropdown"><a class="nav-link menu-title" href="#"><i data-feather="airplay"></i><span>Data Master</span></a>
                 <ul class="nav-submenu menu-content">
-                    <li><a href="<? echo base_url()?>kelola_admin">Data Meterial</a></li>
-                    <li><a href="<? echo base_url()?>kelola_admin">Data Karyawan</a></li>
-                    <li><a href="<? echo base_url()?>kelola_admin">Data Proyek</a></li>
+                    <li><a href="<? echo base_url()?>data_material">Data Meterial</a></li>
+                    <li><a href="<? echo base_url()?>data_karyawan">Data Karyawan</a></li>
+                    <li><a href="<? echo base_url()?>data_proyek">Data Proyek</a></li>
                     <li><a href="<? echo base_url()?>kelola_admin">Data Alat</a></li>
                 </ul>
                 </li>

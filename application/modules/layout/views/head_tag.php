@@ -37,6 +37,8 @@
         <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>/assets/css/custom.css">
         <!-- Responsive css-->
         <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>/assets/css/responsive.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>/assets/css/datatables.css">
+
     </head>
     <body onload="startTime()">
     <!-- Loader starts-->

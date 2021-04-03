@@ -64,4 +64,13 @@ $route['simpan_admin'] = 'AdminController/saveSuperAdmin';
 //Auth
 $route['Logout'] = 'Auth/logout';
 
+//Data Master
+//Data Material
+$route['data_material'] = 'data_material';
+$route['simpan_material'] = 'data_material/simpan_material';
 
+//Data Karyawan
+$route['data_karyawan'] = 'data_karyawan';
+
+//Data Proyek
+$route['data_proyek'] = 'data_proyek';
