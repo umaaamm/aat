@@ -61,5 +61,7 @@ $route['kelola_admin'] = 'AdminController';
 $route['kelola_super_admin'] = 'kelola_super_admin';
 $route['simpan_admin'] = 'AdminController/saveSuperAdmin';
 
+//Auth
+$route['Logout'] = 'Auth/logout';
 
 

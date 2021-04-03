@@ -39,51 +39,17 @@
                 </li>
             </ul>
             </li>
-            <li class="onhover-dropdown"><i data-feather="message-square"></i>
-            <ul class="chat-dropdown onhover-show-div p-t-15 p-b-15">
-                <li>
-                <div class="media"><img class="img-fluid rounded-circle mr-3" src="<?php echo base_url();?>/assets/images/user/1.jpg" alt="">
-                    <div class="status-circle away"></div>
-                    <div class="media-body"><span>Erica Hughes</span>
-                    <p class="f-12 light-font">Lorem Ipsum is simply dummy...</p>
-                    </div>
-                    <p class="f-12 font-warning">58 mins ago</p>
-                </div>
-                </li>
-                <li>
-                <div class="media"><img class="img-fluid rounded-circle mr-3" src="<?php echo base_url();?>/assets/images/user/2.jpg" alt="">
-                    <div class="status-circle online"></div>
-                    <div class="media-body"><span>Kori Thomas</span>
-                    <p class="f-12 light-font">Lorem Ipsum is simply dummy...</p>
-                    </div>
-                    <p class="f-12 font-success">1 hr ago</p>
-                </div>
-                </li>
-                <li>
-                <div class="media"><img class="img-fluid rounded-circle mr-3" src="<?php echo base_url();?>/assets/images/user/4.jpg" alt="">
-                    <div class="status-circle offline"></div>
-                    <div class="media-body"><span>Ain Chavez</span>
-                    <p class="f-12 light-font">Lorem Ipsum is simply dummy...</p>
-                    </div>
-                    <p class="f-12 font-danger">32 mins ago</p>
-                </div>
-                </li>
-                <li class="text-center"> <a href="#">View All     </a></li>
-            </ul>
-            </li>
             <li><a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()"><i data-feather="maximize"></i></a></li>
             <li class="onhover-dropdown p-0">
             <div class="media profile-media"><img class="b-r-10" src="<?php echo base_url();?>/assets/images/dashboard/profile.jpg" alt="">
-                <div class="media-body"><span>Emay Walter</span>
-                <p class="mb-0 font-roboto">Admin <i class="middle fa fa-angle-down"></i></p>
+                <div class="media-body"><span><?php echo $_SESSION['username'] ?></span>
+                <p class="mb-0 font-roboto">
+                <?php echo $_SESSION['user_role'] == 1 ? 'Super Admin' : 'Admin'; ?>
+                <i class="middle fa fa-angle-down"></i></p>
                 </div>
             </div>
             <ul class="profile-dropdown onhover-show-div">
-                <li><i data-feather="user"></i><span>Account </span></li>
-                <li><i data-feather="mail"></i><span>Inbox</span></li>
-                <li><i data-feather="file-text"></i><span>Taskboard</span></li>
-                <li><i data-feather="settings"></i><span>Settings</span></li>
-                <li><i data-feather="log-in"> </i><span>Log in</span></li>
+                <li><a href="<? echo base_url()?>/Logout"><i data-feather="log-in"></i><span>Log out</span></a></li>
             </ul>
             </li>
         </ul>
@@ -91,4 +57,4 @@
         <div class="d-lg-none mobile-toggle pull-right"><i data-feather="more-horizontal"></i></div>
     </div>
     </div>
-    <!-- Page Header Ends                              -->
+    <!-- Page Header Ends -->

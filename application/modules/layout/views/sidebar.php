@@ -20,7 +20,7 @@
                 </li>
                 <li class="dropdown"><a class="nav-link menu-title" href="#"><i data-feather="airplay"></i><span>Manajemen Admin</span></a>
                 <ul class="nav-submenu menu-content">
-                    <li><a href="<? echo base_url()?>kelola_admin">Kelola Admin</a></li>
+                    <li><a href="<?php echo base_url()?>kelola_super_admin">Kelola Admin</a></li>
                 </ul>
                 </li>
                 <li class="dropdown"><a class="nav-link menu-title" href="#"><i data-feather="airplay"></i><span>Data Master</span></a>

@@ -41,9 +41,17 @@ class Auth extends CI_Controller {
         $session = array(
             'username'   => $getUser->nama,
             'user_role' => $getUser->role,
+            'email' => $getUser->email,
+            'isLogin' => true
         );
 
         $this->session->set_userdata($session);
         redirect(base_url('home'));
     }
+
+    function logout(){
+		$this->session->sess_destroy();
+		header('location:'.base_url().'auth');
+		return;
+	}
 }
