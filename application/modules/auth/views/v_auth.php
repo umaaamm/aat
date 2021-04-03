@@ -32,8 +32,9 @@
                         <div class="sub-cont">
                           <div class="img">
                             <div class="img__text m--up">
-                              <h2>New User?</h2>
-                              <p>Sign up and discover great amount of new opportunities!</p>
+                              <h2>Admin</h2>
+                              <p>CV. Anugrah Agung Teknik</p>
+                              <p>PT. Siddhakaryya Satuhu Muktik</p>
                             </div>
                           </div>
                           <div>
