@@ -54,6 +54,12 @@ class MY_Controller extends CI_Controller {
 
         $this->BaseModel->insertData('tbl_no_surat', $data_save);
 
-        return noSurat;
+        return $noSurat;
+    }
+    
+    public function returnJson($message)
+    {
+        echo json_encode($message);
+        exit;
     }
 }

@@ -1,54 +1,171 @@
 <?php
-defined ('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Kelola_super_admin extends CI_Controller {
+class Kelola_super_admin extends MY_Controller
+{
 
     function __construct()
     {
         parent::__construct();
         if (!$this->session->userdata('isLogin')) {
-			header('location:'.base_url().'auth');
+            header('location:' . base_url() . 'auth');
             return;
-		}
+        }
     }
 
     public function index()
     {
-        $data['dataSuperAdmin'] = $this->getSuperAdmin();
-        $data['content']='v_kelola_super_admin';
+        $data['content'] = 'v_kelola_super_admin';
         $this->load->view('../../layout/views/master', $data);
     }
 
-    private function getSuperAdmin()
+    public function getSuperAdmin()
     {
         $table = 'tbl_user';
         $result = $this->BaseModel->getAllData($table);
-        if ($result){
-            $list = $result->result_array();
+
+        if (!$result->result_array()) {
+            $this->returnJson(
+                array(
+                    'status' => 'error',
+                    'message' => 'Sistem gagal menampilkan data, silahkan mengulangi beberapa saat lagi.',
+                    'data' => null
+                )
+            );
         }
 
-        return $list;
+        $this->returnJson(
+            array(
+                'status' => 'success',
+                'message' => 'Proses mengambil data super admin berhasil dilakukan.',
+                'data' => $result->result_array()
+            )
+        );
     }
 
-    public function insertSuperAdmin()
+    public function getByID()
     {
-        $data['nama']=$this->input->post("nama");
-		$data['email']=$this->input->post("email");
-		$data['no_hp']=$this->input->post("no_hp");
-		$data['password']=$this->input->post("password");
-		$data['alamat']=$this->input->post("alamat");;
-		$data['role']=1;
+        $data = array(
+            'id_user' => $this->input->post('id'),
+        );
+        
+        $table = 'tbl_user';
+        $result = $this->BaseModel->getWhere($table, $data, '1');
 
-        $insert = $this->BaseModel->insertData('tbl_user', $data);
+        if (!$result->result_array()) {
+            $this->returnJson(
+                array(
+                    'status' => 'error',
+                    'message' => 'Sistem gagal menampilkan data, silahkan mengulangi beberapa saat lagi.',
+                    'data' => null
+                )
+            );
+        }
+
+        $this->returnJson(
+            array(
+                'status' => 'success',
+                'message' => 'Proses penambahan data super admin berhasil dilakukan.',
+                'data' => $result->row()
+            )
+        );
+    }
+
+    public function ajaxInsert()
+    {
+        $dataInsert = array(
+            'nama' => $this->input->post("insert_nama"),
+            'email' => $this->input->post("insert_email"),
+            'no_hp' => $this->input->post("insert_hp"),
+            'password' => md5($this->input->post("insert_password")),
+            'alamat' => $this->input->post("insert_alamat"),
+            'role' => 1,
+        );
+
+        $table = 'tbl_user';
+        $insert = $this->BaseModel->insertData($table, $dataInsert);
 
         if (!$insert) {
-			$this->session->set_flashdata("notif","<div class='alert alert-danger'>Data Gagal di simpan</div>");
-			header('location:'.base_url().'kelola_super_admin');
-			return;
-		}
+            $this->returnJson(
+                array(
+                    'status' => 'error',
+                    'message' => 'Sistem gagal menambahkan data, silahkan mengulangi beberapa saat lagi.',
+                    'data' => null
+                )
+            );
+        }
 
-		$this->session->set_flashdata("notif","<div class='alert alert-success'>Data berhasil di simpan</div>");
-		header('location:'.base_url().'kelola_super_admin');
-		return;
+        $this->returnJson(
+            array(
+                'status' => 'success',
+                'message' => 'Proses penambahan data super admin berhasil dilakukan.',
+                'data' => null
+            )
+        );
+    }
+
+    public function ajaxUpdate()
+    {
+        $dataUpdate = array(
+            'nama' => $this->input->post("editNamaForm"),
+            'email' => $this->input->post("editEmailForm"),
+            'no_hp' => $this->input->post("editNoHPForm"),
+            'password' => md5($this->input->post("editPasswordForm")),
+            'alamat' => $this->input->post("editAlamatForm"),
+            'role' => $this->input->post("roleUser"),
+        );
+
+        $idUser = array(
+            'id_user' => $this->input->post('idUser')
+        );
+
+        $table = 'tbl_user';
+        $insert = $this->BaseModel->EditData($table, $dataUpdate, $idUser);
+
+        if (!$insert) {
+            $this->returnJson(
+                array(
+                    'status' => 'error',
+                    'message' => 'Sistem gagal memperbarui data, silahkan mengulangi beberapa saat lagi.',
+                    'data' => null
+                )
+            );
+        }
+
+        $this->returnJson(
+            array(
+                'status' => 'success',
+                'message' => 'Proses memperbarui data super admin berhasil dilakukan.',
+                'data' => null
+            )
+        );
+    }
+
+    public function ajaxDelete()
+    {
+        $idUser = array(
+            'id_user' => $this->input->post('id')
+        );
+
+        $table = 'tbl_user';
+        $delete = $this->BaseModel->DeleteData($table, $idUser);
+
+        if (!$delete) {
+            $this->returnJson(
+                array(
+                    'status' => 'error',
+                    'message' => 'Sistem gagal menghapus data, silahkan mengulangi beberapa saat lagi.',
+                    'data' => null
+                )
+            );
+        }
+
+        $this->returnJson(
+            array(
+                'status' => 'success',
+                'message' => 'Proses menghapus data super admin berhasil dilakukan.',
+                'data' => null
+            )
+        );
     }
 }
