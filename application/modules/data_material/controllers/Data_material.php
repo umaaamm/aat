@@ -30,22 +30,147 @@ class Data_material extends MY_Controller {
         return $list;
     }
 
-    public function simpan_material(){
-        $data['nama_material']=$this->input->post("nama_material");
-		$data['harga_material']=$this->input->post("harga_material");
-		$data['satuan']=$this->input->post("satuan");
+    public function getDataMaterial()
+    {
+        $result = $this->db->query("select * from tbl_material INNER JOIN tbl_satuan ON tbl_material.id_satuan = tbl_satuan.id_satuan");
+        if (!$result->result_array()) {
+            $this->returnJson(
+                array(
+                    'status' => 'error',
+                    'message' => 'Sistem gagal menampilkan data, silahkan mengulangi beberapa saat lagi.',
+                    'data' => null
+                )
+            );
+        }
 
-        $insert = $this->BaseModel->insertData('tbl_material', $data);
+        $this->returnJson(
+            array(
+                'status' => 'success',
+                'message' => 'Proses mengambil data super admin berhasil dilakukan.',
+                'data' => $result->result_array()
+            )
+        );
+    }
+
+    public function ajaxInsert()
+    {
+        $dataInsert = array(
+            'nama_material' => $this->input->post("insert_nama_material"),
+            'harga_material' => $this->input->post("insert_harga_material"),
+            'id_satuan' => $this->input->post("insert_id_satuan")
+        );
+
+        $table = 'tbl_material';
+        $insert = $this->BaseModel->insertData($table, $dataInsert);
 
         if (!$insert) {
-			$this->session->set_flashdata("notif","<div class='alert alert-danger'>Data Gagal di simpan</div>");
-			header('location:'.base_url().'data_material');
-			return;
-		}
+            $this->returnJson(
+                array(
+                    'status' => 'error',
+                    'message' => 'Sistem gagal menambahkan data, silahkan mengulangi beberapa saat lagi.',
+                    'data' => null
+                )
+            );
+        }
 
-		$this->session->set_flashdata("notif","<div class='alert alert-success'>Data berhasil di simpan</div>");
-		header('location:'.base_url().'data_material');
-		return;
+        $this->returnJson(
+            array(
+                'status' => 'success',
+                'message' => 'Proses penambahan data super admin berhasil dilakukan.',
+                'data' => null
+            )
+        );
+    }
+
+    public function ajaxDelete()
+    {
+        $idUser = array(
+            'id_material' => $this->input->post('id')
+        );
+
+        $table = 'tbl_material';
+        $delete = $this->BaseModel->DeleteData($table, $idUser);
+
+        if (!$delete) {
+            $this->returnJson(
+                array(
+                    'status' => 'error',
+                    'message' => 'Sistem gagal menghapus data, silahkan mengulangi beberapa saat lagi.',
+                    'data' => null
+                )
+            );
+        }
+
+        $this->returnJson(
+            array(
+                'status' => 'success',
+                'message' => 'Proses menghapus data super admin berhasil dilakukan.',
+                'data' => null
+            )
+        );
+    }
+
+    public function getByID()
+    {
+        $data = array(
+            'id_material' => $this->input->post('id'),
+        );
+        
+        $table = 'tbl_material';
+        $result = $this->BaseModel->getWhere($table, $data, '1');
+
+        if (!$result->result_array()) {
+            $this->returnJson(
+                array(
+                    'status' => 'error',
+                    'message' => 'Sistem gagal menampilkan data, silahkan mengulangi beberapa saat lagi.',
+                    'data' => null
+                )
+            );
+        }
+
+        $this->returnJson(
+            array(
+                'status' => 'success',
+                'message' => 'Proses penambahan data super admin berhasil dilakukan.',
+                'data' => $result->row()
+            )
+        );
+    }
+
+    public function ajaxUpdate()
+    {
+        $dataUpdate = array(
+            'nama_material' => $this->input->post("form_edit_nama_material"),
+            'harga_material' => $this->input->post("form_edit_harga_material"),
+            'id_satauan' => md5($this->input->post("form_edit_id_satuan"))
+        );
+
+        $idMaterial = array(
+            'id_material' => $this->input->post('idMaterial')
+        );
+
+        // print($dataUpdate);die();
+        $table = 'tbl_material';
+        $insert = $this->BaseModel->EditData($table, $dataUpdate, $idMaterial);
+
+        if (!$insert) {
+            $this->returnJson(
+                array(
+                    'status' => 'error',
+                    'message' => 'Sistem gagal memperbarui data, silahkan mengulangi beberapa saat lagi.',
+                    'data' => null
+                )
+            );
+        }
+
+        $this->returnJson(
+            array(
+                'status' => 'success',
+                'message' => 'Proses memperbarui data super admin berhasil dilakukan.',
+                'data' => null
+            )
+        );
     }
 
 }

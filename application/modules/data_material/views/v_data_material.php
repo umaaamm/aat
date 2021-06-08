@@ -1,3 +1,278 @@
+<script>
+    $(document).ready(function() {
+        const formInput = $("#insert_harga_material_form");
+        const formEdit = $("#edit_material_form");
+        getData();
+
+        formInput.validate({
+            rules: {
+                insert_nama_material: "required",
+                insert_harga_material: "required",
+                insert_satuan_material: "required"
+            },
+            messages: {
+                insert_nama_material: "Masukkan nama material !",
+                insert_harga_material: "Masukkan harga material !",
+                insert_satuan_material: "Pilih satuan material !",
+            },
+            submitHandler: function(formInput) {
+                Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?', 'Ya', 'Tidak',
+                    function() {
+                        // Yes button callback alert('Thank you.'); 
+                        let initialForm = $("#insert_harga_material_form")[0];
+                        let formData = new FormData(initialForm);
+                        insertData(formData);
+                    },
+                    function() {
+                        // No button callback alert('If you say so...'); 
+                        return;
+                    });
+            }
+        });
+
+        formEdit.validate({
+            rules: {
+                insert_nama_material: "required",
+                insert_harga_material: "required",
+                insert_satuan_material: "required"
+            },
+            messages: {
+                insert_nama_material: "Masukkan nama material !",
+                insert_harga_material: "Masukkan harga material !",
+                insert_satuan_material: "Pilih satuan material !",
+            },
+            submitHandler: function(formEdit) {
+                Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?', 'Ya', 'Tidak',
+                    function() {
+                        // Yes button callback alert('Thank you.'); 
+                        let initialForm = formEdit;
+                        let formData = new FormData(initialForm);
+                        editData(formData);
+                    },
+                    function() {
+                        // No button callback alert('If you say so...'); 
+                        return;
+                    });
+            }
+        });
+
+        const table = $('#harga_material_table').DataTable({
+            scrollX: true,
+            language: {
+                search: "Filter"
+            },
+            responsive: true,
+            columns: [
+                {
+                    title: "Nama Material",
+                    data: "nama_material"
+                },
+                {
+                    title: "Harga Material",
+                    data: "harga_material"
+                },
+                {
+                    title: "Satuan Material",
+                    data: "nama_satuan"
+                },
+                {
+                    title: "Action",
+                    data: {
+                        id_material: "id_material"
+                    },
+                    render: function(data) {
+                        let statusButton = '<button class="btn btn-primary" type="button"  onclick="showModal(' + data.id_material + ')" ><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" data-original-title="Hapus Data Material" title="" onclick="deleteConfirmation(' + data.id_material + ')"><i class="fa fa-trash-o"></i></button>'
+                        return statusButton;
+                    }
+                }
+            ]
+        })
+    });
+
+
+    const deleteConfirmation = (id) => {
+        Notiflix.Confirm.Show('Konfirmasi Hapus', 'Apakah anda yakin akan menghapus data ini ?', 'Ya', 'Tidak',
+            function() {
+                // Yes button callback alert('Thank you.'); 
+                deleteData(id);
+                return;
+            },
+            function() {
+                // No button callback alert('If you say so...'); 
+                return;
+            });
+    }
+
+    const getData = () => {
+        $.ajax({
+            url: 'data_material/getDataMaterial',
+            type: 'GET',
+            dataType: 'json',
+            beforeSend: function() {
+                // Statement
+                Notiflix.Loading.Pulse('Mohon Menunggu...');
+            },
+            complete: function() {
+                // remove
+                Notiflix.Loading.Remove();
+            },
+            success: function(response) {
+
+                console.log("lwlw", response);
+
+                if (response.status !== 'success') {
+                    Notiflix.Report.Failure('Terjadi Kesalahan', response.message, 'Tutup');
+                    return;
+                }
+
+                $('#harga_material_table').dataTable().fnClearTable();
+                $('#harga_material_table').dataTable().fnAddData(response.data);
+                return;
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error getData : ' + textStatus + ' ' + errorThrown);
+            }
+        })
+    }
+
+    const insertData = (formData) => {
+        $.ajax({
+            url: 'data_material/ajaxInsert',
+            data: formData,
+            type: 'POST',
+            dataType: 'json',
+            mimeType: 'multipart/form-data',
+            contentType: false,
+            cache: false,
+            processData: false,
+            beforeSend: function() {
+                // Statement
+                Notiflix.Loading.Pulse('Mohon Menunggu...');
+            },
+            complete: function() {
+                // remove
+                Notiflix.Loading.Remove();
+            },
+            success: function(response) {
+                if (response.status !== 'success') {
+                    Notiflix.Report.Failure('Terjadi Kesalahan', response.message, 'Tutup');
+                    return;
+                }
+                Notiflix.Report.Success('Berhasil', response.message, 'Tutup');
+                getData();
+                return;
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error insertData : ' + textStatus + ' ' + errorThrown);
+            }
+        })
+    }
+
+    const editData = (formData) => {
+        $.ajax({
+            url: 'data_material/ajaxUpdate',
+            data: formData,
+            type: 'POST',
+            dataType: 'json',
+            mimeType: 'multipart/form-data',
+            contentType: false,
+            cache: false,
+            processData: false,
+            beforeSend: function() {
+                // Statement
+                Notiflix.Loading.Pulse('Mohon Menunggu...');
+            },
+            complete: function() {
+                // remove
+                Notiflix.Loading.Remove();
+            },
+            success: function(response) {
+                if (response.status !== 'success') {
+                    Notiflix.Report.Failure('Terjadi Kesalahan', response.message, 'Tutup');
+                    return;
+                }
+                Notiflix.Report.Success('Berhasil', response.message, 'Tutup');
+                $('#editModal').modal('hide');
+                getData();
+                return;
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error editData : ' + textStatus + ' ' + errorThrown);
+            }
+        })
+    }
+
+    const deleteData = (id) => {
+        $.ajax({
+            url: 'data_material/ajaxDelete',
+            data: {
+                id: id
+            },
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function() {
+                // Statement
+                Notiflix.Loading.Pulse('Mohon Menunggu...');
+            },
+            complete: function() {
+                // remove
+                Notiflix.Loading.Remove();
+            },
+            success: function(response) {
+                if (response.status !== 'success') {
+                    Notiflix.Report.Failure('Terjadi Kesalahan', response.message, 'Tutup');
+                    return;
+                }
+                Notiflix.Report.Success('Berhasil', response.message, 'Tutup');
+                $('#editModal').modal('hide');
+                getData();
+                return;
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error deleteData : ' + textStatus + ' ' + errorThrown);
+            }
+        })
+    }
+
+    const showModal = (id) => {
+        $('#editModal').modal('show');
+        $.ajax({
+            url: 'data_material/getByID',
+            data: {
+                id: id
+            },
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function() {
+                // Statement
+                Notiflix.Loading.Pulse('Mohon Menunggu...');
+            },
+            complete: function() {
+                // remove
+                Notiflix.Loading.Remove();
+            },
+            success: function(response) {
+                if (response.status !== 'success') {
+                    Notiflix.Report.Failure('Terjadi Kesalahan', response.message, 'Tutup');
+                    return;
+                }
+
+                console.log('qqqqq', response.data);
+                
+                $('#editModalLabel').text('Edit Data ' + response.data.nama);
+                $('#edit_nama_material').val(response.data.nama_material);
+                $('#edit_harga_material').val(response.data.harga_material);
+                $('#edit_id_satuan').val(response.data.id_satuan);
+                $('#editIDForm').val(response.data.id_material);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error showModal : ' + textStatus + ' ' + errorThrown);
+            }
+        })
+    };
+</script>
+
+
 <div class="page-body">
     <div class="container-fluid">
        <div class="page-header">
@@ -41,32 +316,32 @@
                     <span>Silahkan isi data sesuai dengan form yang telah disediakan.</span>
                 </div>
                 <div class="card-body">
-                    <form class="needs-validation" method="post" action="<?php echo base_url('simpan_material');?>">
+                    <form id="insert_harga_material_form">
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="validationCustom01">Nama Material</label>
-                                <input class="form-control" type="text" placeholder="Nama Material" name="nama_material" required="Nama Materia Tidak Boleh Kosong">
+                                <input class="form-control" id="insert_nama_material" type="text" placeholder="Nama Material" name="insert_nama_material" required="Nama Materia Tidak Boleh Kosong">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="validationCustom01">Harga Material</label>
-                                <input class="form-control" type="text" placeholder="Harga Material" name="harga_material" required="Harga Material Tidak Boleh Kosong">
+                                <input class="form-control" id="insert_harga_material" type="text" placeholder="Harga Material" name="insert_harga_material" required="Harga Material Tidak Boleh Kosong">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="validationCustom01">Satuan</label>
-                                <select class="form-control digits" name="satuan" id="satuan">
+                                <select class="form-control digits" name="insert_id_satuan" id="insert_id_satuan">
 									<option value="-">- Pilih Salah Satu -</option>
 									<?php 
                                     foreach($dataSatuan as $row):?>
-										<option value="<?php echo $row->key_satuan;?>"><?php echo $row->nama_satuan;?></option>
+										<option value="<?php echo $row->id_satuan;?>"><?php echo $row->nama_satuan;?></option>
 									<?php endforeach;?>
 								</select>
                             </div>
                         </div>
-                        <button class="btn btn-primary" type="submit">Simpan</button>
+                        <button class="btn btn-primary" id="btn_insert_harga_material" type="submit">Simpan</button>
                     </form>
                 </div>
             </div>
@@ -80,32 +355,8 @@
                 </div>
                 <div class="card-body">
                 <div class="table-responsive">
-                <table class="stripe" id="example-style-8">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Nama Material</th>
-                                <th scope="col">Harga Material</th>
-                                <th scope="col">Satuan</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <?php $a=1;
-                        foreach ($dataMaterial as $key) {
-                            ?>
-                            <tbody>
-                                <tr>
-                                    <th scope="row"><?php echo $a;?></th>
-                                    <td><?php echo $key['nama_material'];?></td>
-                                    <td><?php echo $key['harga_material'];?></td>
-                                    <td><?php echo $key['satuan'];?></td>
-                                    <td><button class="btn btn-primary" type="button" data-original-title="Edit Data Admin" title=""data-toggle="modal" data-target="#editModal" onclick=""><i class="fa fa-edit"></i></button>
-                                        <button class="btn btn-danger" type="button" data-original-title="Hapus Data Admin" title="" onclick="hapus(<?php echo $key['id_user'];?>)"><i class="fa fa-trash-o"></i></button>
-                                    </td>
-                                </tr>
-                                <?php $a++; } ?>
-                            </tbody>
-                    </table>
+                <table class="table table-border-horizontal" id="harga_material_table">
+                </table>
                 </div>
             </div>
             </div>
@@ -114,4 +365,48 @@
 </div>
 
 <!-- endpagebody -->
+</div>
+
+<!-- Modal Edit-->
+<div class="modal fade" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <form id="edit_material_form">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="validationCustom01">Nama Material</label>
+                                <input class="form-control" id="edit_nama_material" type="text" placeholder="Nama Material" name="form_edit_nama_material" required="Nama Materia Tidak Boleh Kosong">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="validationCustom01">Harga Material</label>
+                                <input class="form-control" id="edit_harga_material" type="text" placeholder="Harga Material" name="form_edit_harga_material" required="Harga Material Tidak Boleh Kosong">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="validationCustom01">Satuan</label>
+                                <select class="form-control digits" name="form_edit_id_satuan" id="insert_id_satuan">
+									<option value="-">- Pilih Salah Satu -</option>
+									<?php 
+                                    foreach($dataSatuan as $row):?>
+										<option value="<?php echo $row->id_satuan;?>"><?php echo $row->nama_satuan;?></option>
+									<?php endforeach;?>
+								</select>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <input class="form-control" type="text" id="editIDForm" name="idMatarial" hidden>
+                    </div>
+                        <button class="btn btn-primary" type="submit">Simpan</button>
+                    </form>
+            </div>
+        </div>
+    </div>
 </div>
