@@ -74,3 +74,6 @@ $route['data_karyawan'] = 'data_karyawan';
 
 //Data Proyek
 $route['data_proyek'] = 'data_proyek';
+
+//Data Alt
+$route['data_alat'] = 'data_alat';

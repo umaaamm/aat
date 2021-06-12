@@ -12,6 +12,15 @@ class MY_Controller extends CI_Controller {
         return $list;
     }
 
+    public function getKondisiAlat(){
+        $table = 'tbl_kondisi_alat';
+        $result = $this->BaseModel->getAllData($table);
+        if ($result){
+            $list = $result->result();
+        }
+        return $list;
+    }
+
     public function getNamaPT(){
         $table = 'tbl_pt';
         $result = $this->BaseModel->getAllData($table);

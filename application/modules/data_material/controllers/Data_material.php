@@ -14,10 +14,10 @@ class Data_material extends MY_Controller {
 
     public function index()
     {
-        // $this->createNoSurat("SSM","BJ");
         $data['dataSatuan'] = $this->getSatuanMaterial();
         $data['dataMaterial'] = $this->getMaterial();
         $data['content']='v_data_material';
+
         $this->load->view('../../layout/views/master', $data);
     }
 
@@ -32,24 +32,16 @@ class Data_material extends MY_Controller {
 
     public function getDataMaterial()
     {
-        $result = $this->db->query("select * from tbl_material INNER JOIN tbl_satuan ON tbl_material.id_satuan = tbl_satuan.id_satuan");
-        if (!$result->result_array()) {
+        $result = $this->db->query("select * from tbl_material INNER JOIN tbl_satuan ON tbl_material.satuan = tbl_satuan.id_satuan");
+        if ($result->result_array()) {
             $this->returnJson(
                 array(
-                    'status' => 'error',
-                    'message' => 'Sistem gagal menampilkan data, silahkan mengulangi beberapa saat lagi.',
-                    'data' => null
+                    'status' => 'success',
+                    'message' => 'Proses mengambil data material berhasil dilakukan.',
+                    'data' => $result->result_array()
                 )
             );
-        }
-
-        $this->returnJson(
-            array(
-                'status' => 'success',
-                'message' => 'Proses mengambil data super admin berhasil dilakukan.',
-                'data' => $result->result_array()
-            )
-        );
+        };
     }
 
     public function ajaxInsert()
@@ -57,7 +49,7 @@ class Data_material extends MY_Controller {
         $dataInsert = array(
             'nama_material' => $this->input->post("insert_nama_material"),
             'harga_material' => $this->input->post("insert_harga_material"),
-            'id_satuan' => $this->input->post("insert_id_satuan")
+            'satuan' => $this->input->post("insert_id_satuan")
         );
 
         $table = 'tbl_material';
@@ -76,7 +68,7 @@ class Data_material extends MY_Controller {
         $this->returnJson(
             array(
                 'status' => 'success',
-                'message' => 'Proses penambahan data super admin berhasil dilakukan.',
+                'message' => 'Proses penambahan data material berhasil dilakukan.',
                 'data' => null
             )
         );
@@ -104,7 +96,7 @@ class Data_material extends MY_Controller {
         $this->returnJson(
             array(
                 'status' => 'success',
-                'message' => 'Proses menghapus data super admin berhasil dilakukan.',
+                'message' => 'Proses menghapus data material berhasil dilakukan.',
                 'data' => null
             )
         );
@@ -132,7 +124,7 @@ class Data_material extends MY_Controller {
         $this->returnJson(
             array(
                 'status' => 'success',
-                'message' => 'Proses penambahan data super admin berhasil dilakukan.',
+                'message' => 'Data material berhasil ditampilkan.',
                 'data' => $result->row()
             )
         );
@@ -143,14 +135,13 @@ class Data_material extends MY_Controller {
         $dataUpdate = array(
             'nama_material' => $this->input->post("form_edit_nama_material"),
             'harga_material' => $this->input->post("form_edit_harga_material"),
-            'id_satauan' => md5($this->input->post("form_edit_id_satuan"))
+            'satuan' => $this->input->post("form_edit_id_satuan")
         );
 
         $idMaterial = array(
             'id_material' => $this->input->post('idMaterial')
         );
-
-        // print($dataUpdate);die();
+        
         $table = 'tbl_material';
         $insert = $this->BaseModel->EditData($table, $dataUpdate, $idMaterial);
 
@@ -167,7 +158,7 @@ class Data_material extends MY_Controller {
         $this->returnJson(
             array(
                 'status' => 'success',
-                'message' => 'Proses memperbarui data super admin berhasil dilakukan.',
+                'message' => 'Proses memperbarui data material berhasil dilakukan.',
                 'data' => null
             )
         );

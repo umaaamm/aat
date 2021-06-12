@@ -1,8 +1,7 @@
 <?php
 defined ('BASEPATH') OR exit('No direct script access allowed');
 
-class Data_karyawan extends MY_Controller {
-
+class Data_alat extends MY_Controller {
     function __construct()
     {
         parent::__construct();
@@ -14,13 +13,14 @@ class Data_karyawan extends MY_Controller {
 
     public function index()
     {
-        $data['content']='v_data_karyawan';
+        $data['dataKondisi'] = $this->getKondisiAlat();
+        $data['content']='v_data_alat';
+
         $this->load->view('../../layout/views/master', $data);
     }
 
-    public function getDataKaryawan(){
-        $table = 'data_karyawan';
-        $result = $this->BaseModel->getAllData($table);
+    public function getDataAlat() {
+        $result = $this->db->query("select * from tbl_alat INNER JOIN tbl_kondisi_alat ON tbl_alat.kondisi_alat = tbl_kondisi_alat.id_kondisi");
         if ($result->result_array()) {
             $this->returnJson(
                 array(
@@ -35,12 +35,14 @@ class Data_karyawan extends MY_Controller {
     public function ajaxInsert()
     {
         $dataInsert = array(
-            'nama_karyawan' => $this->input->post("insert_nama_karyawan"),
-            'no_hp_karyawan' => $this->input->post("insert_no_hp_karyawan"),
-            'alamat_karyawan' => $this->input->post("insert_alamat_karyawan")
+            'merk_alat' => $this->input->post("insert_merk_alat"),
+            'tahun_beli' => $this->input->post("insert_tahun_beli"),
+            'seri_alat' => $this->input->post("insert_seri_alat"),
+            'jumlah_alat' => $this->input->post("insert_jumlah_alat"),
+            'kondisi_alat' => $this->input->post("insert_kondisi_alat")
         );
 
-        $table = 'data_karyawan';
+        $table = 'tbl_alat';
         $insert = $this->BaseModel->insertData($table, $dataInsert);
 
         if (!$insert) {
@@ -56,7 +58,7 @@ class Data_karyawan extends MY_Controller {
         $this->returnJson(
             array(
                 'status' => 'success',
-                'message' => 'Proses penambahan data karyawan berhasil dilakukan.',
+                'message' => 'Proses penambahan data alat berhasil dilakukan.',
                 'data' => null
             )
         );
@@ -65,10 +67,10 @@ class Data_karyawan extends MY_Controller {
     public function ajaxDelete()
     {
         $idUser = array(
-            'id_karyawan' => $this->input->post('id')
+            'id_alat' => $this->input->post('id')
         );
 
-        $table = 'data_karyawan';
+        $table = 'tbl_alat';
         $delete = $this->BaseModel->DeleteData($table, $idUser);
 
         if (!$delete) {
@@ -84,7 +86,7 @@ class Data_karyawan extends MY_Controller {
         $this->returnJson(
             array(
                 'status' => 'success',
-                'message' => 'Proses menghapus data karyawan berhasil dilakukan.',
+                'message' => 'Proses menghapus data alat berhasil dilakukan.',
                 'data' => null
             )
         );
@@ -93,10 +95,10 @@ class Data_karyawan extends MY_Controller {
     public function getByID()
     {
         $data = array(
-            'id_karyawan' => $this->input->post('id'),
+            'id_alat' => $this->input->post('id'),
         );
         
-        $table = 'data_karyawan';
+        $table = 'tbl_alat';
         $result = $this->BaseModel->getWhere($table, $data, '1');
 
         if (!$result->result_array()) {
@@ -112,7 +114,7 @@ class Data_karyawan extends MY_Controller {
         $this->returnJson(
             array(
                 'status' => 'success',
-                'message' => 'Data karyawan berhasil ditampilkan.',
+                'message' => 'Data material berhasil ditampilkan.',
                 'data' => $result->row()
             )
         );
@@ -121,16 +123,18 @@ class Data_karyawan extends MY_Controller {
     public function ajaxUpdate()
     {
         $dataUpdate = array(
-            'nama_karyawan' => $this->input->post("form_edit_nama_karyawan"),
-            'alamat_karyawan' => $this->input->post("form_edit_alamat_karyawan"),
-            'no_hp_karyawan' => $this->input->post("form_edit_no_hp_karyawan")
+            'merk_alat' => $this->input->post("form_edit_merk_alat"),
+            'tahun_beli' => $this->input->post("form_edit_tahun_beli"),
+            'seri_alat' => $this->input->post("form_edit_seri_alat"),
+            'jumlah_alat' => $this->input->post("form_edit_jumlah_alat"),
+            'kondisi_alat' => $this->input->post("form_edit_kondisi_alat")
         );
 
         $idMaterial = array(
-            'id_karyawan' => $this->input->post('idKaryawan')
+            'id_alat' => $this->input->post('idAlat')
         );
         
-        $table = 'data_karyawan';
+        $table = 'tbl_alat';
         $insert = $this->BaseModel->EditData($table, $dataUpdate, $idMaterial);
 
         if (!$insert) {
@@ -146,9 +150,11 @@ class Data_karyawan extends MY_Controller {
         $this->returnJson(
             array(
                 'status' => 'success',
-                'message' => 'Proses memperbarui data karyawan berhasil dilakukan.',
+                'message' => 'Proses memperbarui data material berhasil dilakukan.',
                 'data' => null
             )
         );
     }
 }
+
+?>
