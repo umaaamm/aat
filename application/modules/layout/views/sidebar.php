@@ -28,6 +28,7 @@
                     <li><a href="<?php echo base_url()?>data_material">Data Meterial</a></li>
                     <li><a href="<?php echo base_url()?>data_karyawan">Data Karyawan</a></li>
                     <li><a href="<?php echo base_url()?>data_proyek">Data Proyek</a></li>
+                    <li><a href="<?php echo base_url()?>data_rekanan_perusahaan">Data Rekanan Perusahaan</a></li>
                     <li><a href="<?php echo base_url()?>data_alat">Data Alat</a></li>
                 </ul>
                 </li>
@@ -39,7 +40,7 @@
                 </li>
                 <li class="dropdown"><a class="nav-link menu-title" href="#"><i data-feather="airplay"></i><span>Manajemen Laporan</span></a>
                 <ul class="nav-submenu menu-content">
-                    <li><a href="<?php echo base_url()?>kelola_admin">Input Laporan Harian</a></li>
+                    <li><a href="<?php echo base_url()?>laporan_harian">Input Laporan Harian</a></li>
                     <li><a href="<?php echo base_url()?>kelola_admin">Input Laporan Mingguan</a></li>
                     <li><a href="<?php echo base_url()?>kelola_admin">Input Laporan Bulanan</a></li>
                     <li><a href="<?php echo base_url()?>kelola_admin">Netto Proyek</a></li>

@@ -393,7 +393,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <input class="form-control" type="text" id="editIDForm" name="idMaterial" hidden disabled>
+                            <input class="form-control" type="text" id="editIDForm" name="idMaterial" hidden>
                             <button class="btn btn-primary btn-block btn_modal_edit" type="submit">Simpan</button>        
                         </div>
                     </div>

@@ -128,7 +128,6 @@
                 Notiflix.Loading.Remove();
             },
             success: function(response) {
-                console.log('wlwl', response);
                 if (response.status !== 'success') {
                     Notiflix.Report.Failure('Terjadi Kesalahan', response.message, 'Tutup');
                     return;
