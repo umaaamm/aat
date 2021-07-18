@@ -25,7 +25,7 @@ class Data_alat extends MY_Controller {
             $this->returnJson(
                 array(
                     'status' => 'success',
-                    'message' => 'Proses mengambil data material berhasil dilakukan.',
+                    'message' => 'Proses mengambil data alat berhasil dilakukan.',
                     'data' => $result->result_array()
                 )
             );
@@ -114,7 +114,7 @@ class Data_alat extends MY_Controller {
         $this->returnJson(
             array(
                 'status' => 'success',
-                'message' => 'Data material berhasil ditampilkan.',
+                'message' => 'Data alat berhasil ditampilkan.',
                 'data' => $result->row()
             )
         );
@@ -130,12 +130,12 @@ class Data_alat extends MY_Controller {
             'kondisi_alat' => $this->input->post("form_edit_kondisi_alat")
         );
 
-        $idMaterial = array(
+        $idAlat = array(
             'id_alat' => $this->input->post('idAlat')
         );
         
         $table = 'tbl_alat';
-        $insert = $this->BaseModel->EditData($table, $dataUpdate, $idMaterial);
+        $insert = $this->BaseModel->EditData($table, $dataUpdate, $idAlat);
 
         if (!$insert) {
             $this->returnJson(
@@ -150,7 +150,7 @@ class Data_alat extends MY_Controller {
         $this->returnJson(
             array(
                 'status' => 'success',
-                'message' => 'Proses memperbarui data material berhasil dilakukan.',
+                'message' => 'Proses memperbarui data alat berhasil dilakukan.',
                 'data' => null
             )
         );

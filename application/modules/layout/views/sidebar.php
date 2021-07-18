@@ -51,7 +51,7 @@
                 <ul class="nav-submenu menu-content">
                     <li><a href="<?php echo base_url()?>kelola_admin">Form Invoice</a></li>
                     <li><a href="<?php echo base_url()?>kelola_admin">Form Surat Jalan</a></li>
-                    <li><a href="<?php echo base_url()?>kelola_admin">Form Kwitansi</a></li>
+                    <li><a href="<?php echo base_url()?>form_kwitansi">Form Kwitansi</a></li>
                     <li><a href="<?php echo base_url()?>kelola_admin">Form Berita Acara Awal & Selesai</a></li>
                     <li><a href="<?php echo base_url()?>kelola_admin">Slip Gaji</a></li>
                 </ul>

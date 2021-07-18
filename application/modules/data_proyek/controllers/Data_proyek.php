@@ -20,7 +20,7 @@ class Data_proyek extends MY_Controller {
         $this->load->view('../../layout/views/master', $data);
     }
 
-    private function getProyek(){
+    public function getProyek(){
         $table = 'tbl_proyek';
         $result = $this->db->query('select * from tbl_proyek join tbl_pt on tbl_proyek.id_pt = tbl_pt.id_pt');
         if ($result){
