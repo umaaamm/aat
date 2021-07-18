@@ -49,7 +49,7 @@ class Data_material extends MY_Controller {
         $dataInsert = array(
             'nama_material' => $this->input->post("insert_nama_material"),
             'harga_material' => $this->input->post("insert_harga_material"),
-            'satuan' => $this->input->post("insert_id_satuan")
+            'satuan' => $this->input->post("insert_satuan_material")
         );
 
         $table = 'tbl_material';

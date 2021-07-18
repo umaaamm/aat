@@ -22,11 +22,26 @@ class Data_proyek extends MY_Controller {
 
     private function getProyek(){
         $table = 'tbl_proyek';
-        $result = $this->BaseModel->getAllData($table);
+        $result = $this->db->query('select * from tbl_proyek join tbl_pt on tbl_proyek.id_pt = tbl_pt.id_pt');
         if ($result){
             $list = $result->result();
         }
         return $list;
+    }
+
+    public function getDataProyek()
+    {
+        $table = 'tbl_proyek';
+        $result = $this->db->query('select * from tbl_proyek join tbl_pt on tbl_proyek.id_pt = tbl_pt.id_pt');
+        if ($result->result_array()) {
+            $this->returnJson(
+                array(
+                    'status' => 'success',
+                    'message' => 'Proses mengambil data material berhasil dilakukan.',
+                    'data' => $result->result_array()
+                )
+            );
+        }
     }
 
     public function ajaxInsert()
@@ -34,10 +49,13 @@ class Data_proyek extends MY_Controller {
         $dataInsert = array(
             'nama_proyek' => $this->input->post("insert_nama_proyek"),
             'alamat_proyek' => $this->input->post("insert_alamat_proyek"),
-            'nama_pic' => $this->input->post("insert_nama_pic"),
-            'no_hp_pic' => $this->input->post("insert_no_hp_pic"),
+            'nama_pic' => $this->input->post("insert_nama_pic_proyek"),
+            'no_hp_pic' => $this->input->post("insert_no_hp_pic_proyek"),
             'id_pt' => $this->input->post("insert_id_pt")
         );
+
+
+        // var_dump($dataInsert); die();
 
         $table = 'tbl_proyek';
         $insert = $this->BaseModel->insertData($table, $dataInsert);

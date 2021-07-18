@@ -1,5 +1,5 @@
 <script>
-$(document).ready(function() {
+    $(document).ready(function() {
         const formInput = $("#insert_data_proyek_form");
         const formEdit = $("#edit_data_proyek_form");
         getData();
@@ -8,58 +8,55 @@ $(document).ready(function() {
             rules: {
                 insert_nama_proyek: "required",
                 insert_alamat_proyek: "required",
-                insert_nama_pic: "required",
-                insert_no_hp_pic: "required",
+                insert_nama_pic_proyek: "required",
+                insert_no_hp_pic_proyek: "required",
                 insert_id_pt: "required",
             },
             messages: {
                 insert_nama_proyek: "Masukkan nama proyek!",
                 insert_alamat_proyek: "Masukkan alamat proyek!",
-                insert_nama_pic: "Masukkan nama PIC!",
-                insert_no_hp_pic: "Masukkan no hp PIC!",
-                insert_id_pt: "Pilih proyek yang mengerjakan!,
+                insert_nama_pic_proyek: "Masukkan nama PIC!",
+                insert_no_hp_pic_proyek: "Masukkan no hp PIC!",
+                insert_id_pt: "Pilih proyek yang mengerjakan!",
             },
             submitHandler: function(formInput) {
 
                 Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?', 'Ya', 'Tidak',
                     function() {
-                        // Yes button callback alert('Thank you.'); 
                         let initialForm = $("#insert_data_proyek_form")[0];
                         let formData = new FormData(initialForm);
                         insertData(formData);
                     },
                     function() {
-                        // No button callback alert('If you say so...'); 
                         return;
-                    });
+                    }
+                );
             }
         });
 
         formEdit.validate({
             rules: {
-                insert_nama_proyek: "required",
-                insert_alamat_proyek: "required",
-                insert_nama_pic: "required",
-                insert_no_hp_pic: "required",
-                insert_id_pt: "required",
+                edit_nama_proyek: "required",
+                edit_alamat_proyek: "required",
+                edit_nama_pic: "required",
+                edit_no_hp_pic: "required",
+                edit_id_pt: "required",
             },
             messages: {
-                insert_nama_proyek: "Masukkan nama proyek!",
-                insert_alamat_proyek: "Masukkan alamat proyek!",
-                insert_nama_pic: "Masukkan nama PIC!",
-                insert_no_hp_pic: "Masukkan no hp PIC!",
-                insert_id_pt: "Pilih proyek yang mengerjakan!,
+                edit_nama_proyek: "Masukkan nama proyek!",
+                edit_alamat_proyek: "Masukkan alamat proyek!",
+                edit_nama_pic: "Masukkan nama PIC!",
+                edit_no_hp_pic: "Masukkan no hp PIC!",
+                edit_id_pt: "Pilih proyek yang mengerjakan!",
             },
             submitHandler: function(formEdit) {
                 Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?', 'Ya', 'Tidak',
                     function() {
-                        // Yes button callback alert('Thank you.'); 
                         let initialForm = formEdit;
                         let formData = new FormData(initialForm);
                         editData(formData);
                     },
                     function() {
-                        // No button callback alert('If you say so...'); 
                         return;
                     });
             }
@@ -90,12 +87,12 @@ $(document).ready(function() {
                 },
                 {
                     title: "Nama Perusahaan",
-                    data: "id_pt"
+                    data: "nama_pt"
                 },
                 {
                     title: "Action",
                     data: {
-                        id_material: "id_proyek"
+                        id_proyek: "id_proyek"
                     },
                     render: function(data) {
                         let statusButton = '<button class="btn btn-primary" type="button"  onclick="showModal(' + data.id_proyek + ')" ><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" data-original-title="Hapus Data Proyek" title="" onclick="deleteConfirmation(' + data.id_proyek + ')"><i class="fa fa-trash-o"></i></button>'
@@ -106,23 +103,20 @@ $(document).ready(function() {
         })
     });
 
-
     const deleteConfirmation = (id) => {
         Notiflix.Confirm.Show('Konfirmasi Hapus', 'Apakah anda yakin akan menghapus data ini ?', 'Ya', 'Tidak',
             function() {
-                // Yes button callback alert('Thank you.'); 
                 deleteData(id);
                 return;
             },
             function() {
-                // No button callback alert('If you say so...'); 
                 return;
             });
     }
 
     const getData = () => {
         $.ajax({
-            url: 'data_proyek/getProyek',
+            url: 'data_proyek/getDataProyek',
             type: 'GET',
             dataType: 'json',
             beforeSend: function() {
@@ -134,6 +128,7 @@ $(document).ready(function() {
                 Notiflix.Loading.Remove();
             },
             success: function(response) {
+                console.log('wlwl', response);
                 if (response.status !== 'success') {
                     Notiflix.Report.Failure('Terjadi Kesalahan', response.message, 'Tutup');
                     return;
@@ -142,12 +137,9 @@ $(document).ready(function() {
                 $('#data_proyek_table').dataTable().fnClearTable();
                 $('#data_proyek_table').dataTable().fnAddData(response.data);
                 return;
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error getData : ' + textStatus + ' ' + errorThrown);
             }
         })
-    }
+    };
 
     const insertData = (formData) => {
         $.ajax({
@@ -180,7 +172,7 @@ $(document).ready(function() {
                 alert('Error insertData : ' + textStatus + ' ' + errorThrown);
             }
         })
-    }
+    };
 
     const editData = (formData) => {
         $.ajax({
@@ -246,7 +238,7 @@ $(document).ready(function() {
                 alert('Error deleteData : ' + textStatus + ' ' + errorThrown);
             }
         })
-    }
+    };
 
     const showModal = (id) => {
         $('#editModal').modal('show');
@@ -271,12 +263,12 @@ $(document).ready(function() {
                     return;
                 }
 
-                $('#editModalLabel').text('Edit Data ' + response.data.nama);
+                $('#editModalLabel').text('Edit Data ' + response.data.nama_proyek);
                 $('#edit_nama_proyek').val(response.data.nama_proyek);
                 $('#edit_alamat_proyek').val(response.data.alamat_proyek);
                 $('#edit_nama_pic').val(response.data.nama_pic);
                 $('#edit_no_hp_pic').val(response.data.no_hp_pic);
-                $('#edit_id_pt').val(response.data.id_pt;
+                $('#edit_id_pt').val(response.data.id_pt);
                 $('#editIDForm').val(response.data.id_proyek);
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -284,6 +276,7 @@ $(document).ready(function() {
             }
         })
     };
+
 </script>
 
 <div class="page-body">
@@ -400,38 +393,38 @@ $(document).ready(function() {
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" onclick="$('#editModal').modal('hide');" aria-label="Close"></button>
             </div>
             <div class="modal-body">
             <form id="edit_data_proyek_form">
                         <div class="row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-12 mb-3">
                                 <label for="validationCustom01">Nama Proyek</label>
                                 <input class="form-control" id="edit_nama_proyek" type="text" placeholder="Nama Proyek" name="form_edit_nama_proyek" required="Nama Proyek Tidak Boleh Kosong">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-12 mb-3">
                                 <label for="validationCustom01">Alamat Proyek</label>
                                 <input class="form-control" id="edit_alamat_proyek" type="text" placeholder="Alamat Proyek" name="form_edit_alamat_proyek" required="Alamat Proyek Tidak Boleh Kosong">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-12 mb-3">
                                 <label for="validationCustom01">Nama PIC Proyek</label>
                                 <input class="form-control" id="edit_nama_pic" type="text" placeholder="Nama PIC Proyek" name="form_edit_nama_pic" required="Nama PIC Tidak Boleh Kosong">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-12 mb-3">
                                 <label for="validationCustom01">No HP PIC Proyek</label>
                                 <input class="form-control" id="edit_no_hp_pic" type="text" placeholder="No HP PIC" name="form_edit_no_hp_pic" required="No HP PIC Tidak Boleh Kosong">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-12 mb-3">
                                 <label for="validationCustom01">Perusahaan Yang Mengerjakan</label>
-                                <select class="form-control digits" name="form_edit_id_pt" id="insert_id_pt">
+                                <select class="form-control digits" name="form_edit_id_pt" id="edit_id_pt">
 									<option value="-">- Pilih Salah Satu -</option>
 									<?php 
                                     foreach($getPt as $row):?>
@@ -449,3 +442,4 @@ $(document).ready(function() {
         </div>
     </div>
 </div>
+

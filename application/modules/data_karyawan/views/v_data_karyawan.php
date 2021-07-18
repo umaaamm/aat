@@ -125,9 +125,6 @@
                 $('#data_karyawan_table').dataTable().fnClearTable();
                 $('#data_karyawan_table').dataTable().fnAddData(response.data);
                 return;
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error getData : ' + textStatus + ' ' + errorThrown);
             }
         })
     };
@@ -360,7 +357,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" onclick="$('#editModal').modal('hide');" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="edit_karyawan_form">
