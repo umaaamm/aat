@@ -9,6 +9,7 @@
         <td style="width:35%;text-align:center;padding:20px 0">
             <?php echo 'No. '.$no_kwitansi ?>
         </td>
+    </tr>
 </table>
 <table style="width:100%">
     <tr>

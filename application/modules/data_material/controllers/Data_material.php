@@ -15,40 +15,38 @@ class Data_material extends MY_Controller {
     public function index()
     {
         $data['dataSatuan'] = $this->getSatuanMaterial();
-        $data['dataMaterial'] = $this->getMaterial();
         $data['content']='v_data_material';
 
         $this->load->view('../../layout/views/master', $data);
     }
 
-    private function getMaterial(){
-        $table = 'tbl_material';
-        $result = $this->BaseModel->getAllData($table);
-        if ($result){
-            $list = $result->result();
-        }
-        return $list;
-    }
-
     public function getDataMaterial()
     {
         $result = $this->db->query("select * from tbl_material INNER JOIN tbl_satuan ON tbl_material.satuan = tbl_satuan.id_satuan");
-        if ($result->result_array()) {
+        if (!$result->result_array()){
             $this->returnJson(
                 array(
-                    'status' => 'success',
-                    'message' => 'Proses mengambil data material berhasil dilakukan.',
-                    'data' => $result->result_array()
+                    'status' => 'empty',
+                    'message' => 'Data material masih kosong.',
                 )
             );
-        };
+        }
+
+        $this->returnJson(
+            array(
+                'status' => 'success',
+                'message' => 'Proses mengambil data mterial berhasil dilakukan.',
+                'data' => $result->result_array()
+            )
+        );
     }
 
     public function ajaxInsert()
     {
+        $harga_material = !$this->input->post("insert_harga_material") ? 0 : str_replace(',','',$this->input->post("insert_harga_material"));
         $dataInsert = array(
             'nama_material' => $this->input->post("insert_nama_material"),
-            'harga_material' => $this->input->post("insert_harga_material"),
+            'harga_material' => $harga_material,
             'satuan' => $this->input->post("insert_satuan_material")
         );
 
@@ -132,10 +130,11 @@ class Data_material extends MY_Controller {
 
     public function ajaxUpdate()
     {
+        $harga_material = !$this->input->post("edit_nama_material") ? 0 : str_replace(',','',$this->input->post("edit_nama_material"));
         $dataUpdate = array(
-            'nama_material' => $this->input->post("form_edit_nama_material"),
-            'harga_material' => $this->input->post("form_edit_harga_material"),
-            'satuan' => $this->input->post("form_edit_id_satuan")
+            'nama_material' => $this->input->post("edit_nama_material"),
+            'harga_material' => $harga_material,
+            'satuan' => $this->input->post("edit_satuan_material")
         );
 
         $idMaterial = array(

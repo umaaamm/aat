@@ -4,23 +4,48 @@
         const formEdit = $("#edit_data_proyek_form");
         getData();
 
+        $.validator.addMethod("valueNotEquals", function(value, element, arg){
+            return value !== '-';
+        }, "Pilihan tidak boleh sama.");
+
         formInput.validate({
             rules: {
-                insert_nama_proyek: "required",
-                insert_alamat_proyek: "required",
-                insert_nama_pic_proyek: "required",
-                insert_no_hp_pic_proyek: "required",
-                insert_id_pt: "required",
+                insert_nama_proyek: {
+                    required: true,
+                },
+                insert_alamat_proyek: {
+                    required: true,
+                },
+                insert_nama_pic_proyek: {
+                    required: true,
+                },
+                insert_no_hp_pic_proyek:{
+                    required: true,
+                },
+                insert_id_pt: {
+                    required: true,
+                    valueNotEquals: true,
+                },
             },
             messages: {
-                insert_nama_proyek: "Masukkan nama proyek!",
-                insert_alamat_proyek: "Masukkan alamat proyek!",
-                insert_nama_pic_proyek: "Masukkan nama PIC!",
-                insert_no_hp_pic_proyek: "Masukkan no hp PIC!",
-                insert_id_pt: "Pilih proyek yang mengerjakan!",
+                insert_nama_proyek: {
+                    required: "Masukkan nama proyek!",
+                },
+                insert_alamat_proyek: {
+                    required: "Masukkan alamat proyek!",
+                },
+                insert_nama_pic_proyek: {
+                    required: "Masukkan nama PIC!",
+                },
+                insert_no_hp_pic_proyek: {
+                    required: "Masukkan no hp PIC!",
+                },
+                insert_id_pt: {
+                    required: "Pilih perusahaan yang mengerjakan!",
+                    valueNotEquals: "Pilih perusahaan yang mengerjakan!",
+                },
             },
             submitHandler: function(formInput) {
-
                 Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?', 'Ya', 'Tidak',
                     function() {
                         let initialForm = $("#insert_data_proyek_form")[0];
@@ -34,25 +59,51 @@
             }
         });
 
+        $.validator.addMethod("editValueNotEquals", function(value, element, arg){
+            return value !== '-';
+        }, "Pilihan tidak boleh sama.");
+
         formEdit.validate({
             rules: {
-                edit_nama_proyek: "required",
-                edit_alamat_proyek: "required",
-                edit_nama_pic: "required",
-                edit_no_hp_pic: "required",
-                edit_id_pt: "required",
+                edit_nama_proyek: {
+                    required: true,
+                },
+                edit_alamat_proyek: {
+                    required: true,
+                },
+                edit_nama_pic: {
+                    required: true,
+                },
+                edit_no_hp_pic: {
+                    required: true,
+                },
+                edit_id_pt: {
+                    required: true,
+                    editValueNotEquals: true,
+                },
             },
             messages: {
-                edit_nama_proyek: "Masukkan nama proyek!",
-                edit_alamat_proyek: "Masukkan alamat proyek!",
-                edit_nama_pic: "Masukkan nama PIC!",
-                edit_no_hp_pic: "Masukkan no hp PIC!",
-                edit_id_pt: "Pilih proyek yang mengerjakan!",
+                edit_nama_proyek: {
+                    required: "Masukkan nama proyek!",
+                },
+                edit_alamat_proyek: {
+                    required: "Masukkan alamat proyek!",
+                },
+                edit_nama_pic: {
+                    required: "Masukkan nama PIC!",
+                },
+                edit_no_hp_pic: {
+                    required: "Masukkan no hp PIC!",
+                },
+                edit_id_pt: {
+                    required: "Pilih perusahaan yang mengerjakan!",
+                    editValueNotEquals: "Pilih perusahaan yang mengerjakan!",
+                },
             },
             submitHandler: function(formEdit) {
                 Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?', 'Ya', 'Tidak',
                     function() {
-                        let initialForm = formEdit;
+                        let initialForm = $("#edit_data_proyek_form")[0];
                         let formData = new FormData(initialForm);
                         editData(formData);
                     },
@@ -95,8 +146,10 @@
                         id_proyek: "id_proyek"
                     },
                     render: function(data) {
-                        let statusButton = '<button class="btn btn-primary" type="button"  onclick="showModal(' + data.id_proyek + ')" ><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" data-original-title="Hapus Data Proyek" title="" onclick="deleteConfirmation(' + data.id_proyek + ')"><i class="fa fa-trash-o"></i></button>'
-                        return statusButton;
+                        let html = '<div class="btn-group" role="group" aria-label="First group">';
+                        html += '<button class="btn btn-primary" type="button"  onclick="showModal(' + data.id_proyek + ')" ><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" data-original-title="Hapus Data Proyek" title="" onclick="deleteConfirmation(' + data.id_proyek + ')"><i class="fa fa-trash-o"></i></button>'
+                        html += '</div>';
+                        return html;
                     }
                 }
             ]
@@ -129,7 +182,7 @@
             },
             success: function(response) {
                 if (response.status !== 'success') {
-                    Notiflix.Report.Failure('Terjadi Kesalahan', response.message, 'Tutup');
+                    $('#data_proyek_table').dataTable().fnClearTable();
                     return;
                 }
 
@@ -268,7 +321,7 @@
                 $('#edit_nama_pic').val(response.data.nama_pic);
                 $('#edit_no_hp_pic').val(response.data.no_hp_pic);
                 $('#edit_id_pt').val(response.data.id_pt);
-                $('#editIDForm').val(response.data.id_proyek);
+                $('#idProyek').val(response.data.id_proyek);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert('Error showModal : ' + textStatus + ' ' + errorThrown);
@@ -323,33 +376,21 @@
                 <div class="card-body">
                 <form id="insert_data_proyek_form">
                         <div class="row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="insert_nama_proyek">Nama Proyek</label>
-                                <input class="form-control" type="text" placeholder="Nama Proyek" name="insert_nama_proyek" required="Nama Proyek Tidak Boleh Kosong">
+                                <input class="form-control" type="text" placeholder="Nama Proyek" name="insert_nama_proyek">
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="insert_nama_pic_proyek">Nama PIC Proyek</label>
-                                <input class="form-control" type="text" placeholder="Nama PIC Proyek" name="insert_nama_pic_proyek" required="Nama PIC Proyek Tidak Boleh Kosong">
+                                <input class="form-control" type="text" placeholder="Nama PIC Proyek" name="insert_nama_pic_proyek">
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="insert_no_hp_pic_proyek">No Hp PIC Proyek</label>
-                                <input class="form-control" type="text" placeholder="No Hp PIC Proyek" name="insert_no_hp_pic_proyek" required="No Hp PIC Proyek Tidak Boleh Kosong">
+                                <input class="form-control" type="text" placeholder="No Hp PIC Proyek" name="insert_no_hp_pic_proyek">
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="insert_alamat_proyek">Alamat Proyek</label>
-                                <textarea class="form-control" name="insert_alamat_proyek" rows="3" placeholder="Alamat Proyek"></textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="insert_id_pt">Perusahaan yang Mengerjakan</label>
-                                <select class="form-control digits" name="insert_id_pt" id="pt">
+                                <select class="form-control" name="insert_id_pt" id="insert_id_pt">
 									<option value="-">- Pilih Salah Satu -</option>
 									<?php 
                                     foreach($getPt as $row):?>
@@ -357,8 +398,12 @@
 									<?php endforeach;?>
 								</select>
                             </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="insert_alamat_proyek">Alamat Proyek</label>
+                                <textarea class="form-control" id="insert_alamat_proyek" name="insert_alamat_proyek" rows="3" placeholder="Alamat Proyek"></textarea>
+                            </div>
                         </div>
-                        <button class="btn btn-primary" id="btn_insert_data_proyek" type="submit">Simpan</button>
+                        <button class="btn btn-primary btn-block" id="btn_insert_data_proyek" type="submit">Simpan</button>
                     </form>
                 </div>
             </div>
@@ -372,8 +417,8 @@
                 </div>
                 <div class="card-body">
                 <div class="table-responsive">
-                <table class="table table-border-horizontal" id="data_proyek_table">
-                </table>
+                    <table class="table table-border-horizontal" id="data_proyek_table">
+                    </table>
                 </div>
             </div>
             </div>
@@ -396,47 +441,49 @@
             </div>
             <div class="modal-body">
             <form id="edit_data_proyek_form">
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="validationCustom01">Nama Proyek</label>
-                                <input class="form-control" id="edit_nama_proyek" type="text" placeholder="Nama Proyek" name="form_edit_nama_proyek" required="Nama Proyek Tidak Boleh Kosong">
-                            </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="edit_nama_proyek">Nama Proyek</label>
+                            <input class="form-control" id="edit_nama_proyek" type="text" placeholder="Nama Proyek" name="edit_nama_proyek">
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="validationCustom01">Alamat Proyek</label>
-                                <input class="form-control" id="edit_alamat_proyek" type="text" placeholder="Alamat Proyek" name="form_edit_alamat_proyek" required="Alamat Proyek Tidak Boleh Kosong">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="validationCustom01">Nama PIC Proyek</label>
-                                <input class="form-control" id="edit_nama_pic" type="text" placeholder="Nama PIC Proyek" name="form_edit_nama_pic" required="Nama PIC Tidak Boleh Kosong">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="validationCustom01">No HP PIC Proyek</label>
-                                <input class="form-control" id="edit_no_hp_pic" type="text" placeholder="No HP PIC" name="form_edit_no_hp_pic" required="No HP PIC Tidak Boleh Kosong">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="validationCustom01">Perusahaan Yang Mengerjakan</label>
-                                <select class="form-control digits" name="form_edit_id_pt" id="edit_id_pt">
-									<option value="-">- Pilih Salah Satu -</option>
-									<?php 
-                                    foreach($getPt as $row):?>
-										<option value="<?php echo $row->id_pt;?>"><?php echo $row->nama_pt;?></option>
-									<?php endforeach;?>
-								</select>
-                            </div>
-                        </div>
-                        <div class="row">
-                        <input class="form-control" type="text" id="editIDForm" name="idProyek" hidden>
                     </div>
-                        <button class="btn btn-primary" type="submit">Simpan</button>
-                    </form>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="edit_nama_pic">Nama PIC Proyek</label>
+                            <input class="form-control" id="edit_nama_pic" type="text" placeholder="Nama PIC Proyek" name="edit_nama_pic">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="edit_no_hp_pic">No HP PIC Proyek</label>
+                            <input class="form-control" id="edit_no_hp_pic" type="text" placeholder="No HP PIC" name="edit_no_hp_pic">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="edit_id_pt">Perusahaan Yang Mengerjakan</label>
+                            <select class="form-control" name="edit_id_pt" id="edit_id_pt">
+                                <option value="-">- Pilih Salah Satu -</option>
+                                <?php 
+                                foreach($getPt as $row):?>
+                                    <option value="<?php echo $row->id_pt;?>"><?php echo $row->nama_pt;?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="edit_alamat_proyek">Alamat Proyek</label>
+                            <textarea class="form-control" id="edit_alamat_proyek" name="edit_alamat_proyek" rows="3" placeholder="Alamat Proyek"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <input class="form-control" type="text" id="idProyek" name="idProyek" hidden>
+                            <button class="btn btn-primary btn-block btn_modal_edit" type="submit">Simpan</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

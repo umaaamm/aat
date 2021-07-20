@@ -6,12 +6,20 @@ $(document).ready(function() {
 
     formInput.validate({
         rules: {
-            insert_nama_perusahaan: "required",
-            insert_alamat_perusahaan: "required",
+            insert_nama_perusahaan: {
+                required: true,
+            },
+            insert_alamat_perusahaan: {
+                required: true,
+            },
         },
         messages: {
-            insert_nama_perusahaan: "Masukkan nama perusahaan !",
-            insert_alamat_perusahaan: "Masukkan alamat perusahaan !",
+            insert_nama_perusahaan: {
+                required: "Masukkan nama perusahaan !",
+            },
+            insert_alamat_perusahaan: {
+                required: "Masukkan alamat perusahaan !",
+            },
         },
         submitHandler: function(formInput) {
             Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?',
@@ -32,19 +40,27 @@ $(document).ready(function() {
 
     formEdit.validate({
         rules: {
-            form_edit_nama_perusahaan: "required",
-            form_edit_alamat_perusahaan: "required"
+            edit_nama_perusahaan: {
+                required: true,
+            },
+            edit_alamat_perusahaan: {
+                required: true,
+            },
         },
         messages: {
-            form_edit_nama_perusahaan: "Masukkan nama perusahaan !",
-            form_edit_alamat_perusahaan: "Masukkan alamat perusahaan !"
+            edit_nama_perusahaan: {
+                required: "Masukkan nama perusahaan !",
+            },
+            edit_alamat_perusahaan: {
+                required: "Masukkan alamat perusahaan !",
+            },
         },
         submitHandler: function(formEdit) {
             Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?',
                 'Ya', 'Tidak',
                 function() {
                     // Yes button callback alert('Thank you.'); 
-                    let initialForm = formEdit;
+                    let initialForm = $("#edit_perusahaan_rekanan_form")[0];
                     let formData = new FormData(initialForm);
                     editData(formData);
             },
@@ -75,12 +91,13 @@ $(document).ready(function() {
                     id_perusahaan_rekanan: "id_perusahaan_rekanan"
                 },
                 render: function(data) {
-                    let statusButton =
-                        '<button class="btn btn-primary" type="button"  onclick="showModal(' +
-                        data.id_perusahaan_rekanan +
-                        ')" ><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" data-original-title="Hapus Data Rekanan Perusahaan" title="" onclick="deleteConfirmation(' +
-                        data.id_perusahaan_rekanan + ')"><i class="fa fa-trash-o"></i></button>'
-                    return statusButton;
+                    let html = '<div class="btn-group" role="group" aria-label="First group">';
+                    html += '<button class="btn btn-primary" type="button"  onclick="showModal(' +
+                    data.id_perusahaan_rekanan +
+                    ')" ><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" data-original-title="Hapus Data Rekanan Perusahaan" title="" onclick="deleteConfirmation(' +
+                    data.id_perusahaan_rekanan + ')"><i class="fa fa-trash-o"></i></button>'
+                    html += '</div>';
+                    return html;
                 }
             }
         ]
@@ -117,7 +134,7 @@ const getData = () => {
         success: function(response) {
 
             if (response.status !== 'success') {
-                Notiflix.Report.Failure('Terjadi Kesalahan', response.message, 'Tutup');
+                $('#perusahaan_rekanan_table').dataTable().fnClearTable();
                 return;
             }
 
@@ -253,7 +270,7 @@ const showModal = (id) => {
             $('#editModalLabel').text('Edit Data ' + response.data.nama_perusahaan);
             $('#edit_nama_perusahaan').val(response.data.nama_perusahaan);
             $('#edit_alamat_perusahaan').val(response.data.alamat_perusahaan);
-            $('#editIDForm').val(response.data.id_perusahaan_rekanan);
+            $('#idPerusahaan').val(response.data.id_perusahaan_rekanan);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert('Error showModal : ' + textStatus + ' ' + errorThrown);
@@ -311,26 +328,18 @@ const showModal = (id) => {
                     <div class="card-body">
                         <form id="insert_harga_perusahaan_rekanan_form">
                             <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <label for="validationCustom01">Nama Perusahaan</label>
+                                <div class="col-md-12 mb-3">
+                                    <label for="insert_nama_perusahaan">Nama Perusahaan</label>
                                     <input class="form-control" id="insert_nama_perusahaan" type="text"
                                         placeholder="Nama Perusahaan" name="insert_nama_perusahaan"
                                         required="Nama Material Tidak Boleh Kosong">
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <label for="validationCustom01">Alamat Perusahaan</label>
-                                    <textarea class="form-control" name="insert_alamat_perusahaan" rows="3"
-                                        placeholder="Alamat Perusahaan"></textarea>
+                                <div class="col-md-12 mb-3">
+                                    <label for="insert_alamat_perusahaan">Alamat Perusahaan</label>
+                                    <textarea class="form-control" name="insert_alamat_perusahaan" rows="3" placeholder="Alamat Perusahaan"></textarea>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <button class="btn btn-primary btn-block" id="btn_insert_perusahaan_rekanan"
-                                        type="submit">Simpan</button>
-                                </div>
-                            </div>
+                            <button class="btn btn-primary btn-block" id="btn_insert_perusahaan_rekanan" type="submit">Simpan</button>
                         </form>
                     </div>
                 </div>
@@ -370,20 +379,20 @@ const showModal = (id) => {
                 <form id="edit_perusahaan_rekanan_form">
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="validationCustom01">Nama Perusahaan</label>
+                            <label for="edit_nama_perusahaan">Nama Perusahaan</label>
                             <input class="form-control" id="edit_nama_perusahaan" type="text" placeholder="Nama Perusahaan"
                                 name="form_edit_nama_perusahaan" required="Nama Perusahaan Tidak Boleh Kosong">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="validationCustom01">Alamat Perusahaan</label>
+                            <label for="edit_alamat_perusahaan">Alamat Perusahaan</label>
                             <textarea class="form-control" id="edit_alamat_perusahaan" name="form_edit_alamat_perusahaan" rows="3" placeholder="Alamat Perusahaan"></textarea>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <input class="form-control" type="text" id="editIDForm" name="idPerusahaan" hidden>
+                            <input class="form-control" type="text" id="idPerusahaan" name="idPerusahaan" hidden>
                             <button class="btn btn-primary btn-block btn_modal_edit" type="submit">Simpan</button>
                         </div>
                     </div>

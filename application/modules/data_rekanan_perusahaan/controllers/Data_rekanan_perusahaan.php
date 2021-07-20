@@ -22,15 +22,22 @@ class Data_rekanan_perusahaan extends MY_Controller {
     {
         $table = 'tbl_perusahaan_rekanan';
         $result = $this->BaseModel->getAllData($table);
-        if ($result->result_array()) {
+        if (!$result->result_array()) {
             $this->returnJson(
                 array(
-                    'status' => 'success',
-                    'message' => 'Proses mengambil data rekanan perusahaan berhasil dilakukan.',
-                    'data' => $result->result_array()
+                    'status' => 'empty',
+                    'message' => 'Data slip gaji masih kosong.',
                 )
             );
         };
+
+        $this->returnJson(
+            array(
+                'status' => 'success',
+                'message' => 'Proses mengambil data rekanan perusahaan berhasil dilakukan.',
+                'data' => $result->result_array()
+            )
+        );
     }
 
     public function ajaxInsert()

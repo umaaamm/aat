@@ -23,13 +23,11 @@ class Kelola_super_admin extends MY_Controller
     {
         $table = 'tbl_user';
         $result = $this->BaseModel->getAllData($table);
-
-        if (!$result->result_array()) {
+        if (!$result->result_array()){
             $this->returnJson(
                 array(
-                    'status' => 'error',
-                    'message' => 'Sistem gagal menampilkan data, silahkan mengulangi beberapa saat lagi.',
-                    'data' => null
+                    'status' => 'empty',
+                    'message' => 'Data super admin masih kosong.',
                 )
             );
         }
@@ -107,11 +105,11 @@ class Kelola_super_admin extends MY_Controller
     public function ajaxUpdate()
     {
         $dataUpdate = array(
-            'nama' => $this->input->post("editNamaForm"),
-            'email' => $this->input->post("editEmailForm"),
-            'no_hp' => $this->input->post("editNoHPForm"),
-            'password' => md5($this->input->post("editPasswordForm")),
-            'alamat' => $this->input->post("editAlamatForm"),
+            'nama' => $this->input->post("edit_nama"),
+            'email' => $this->input->post("edit_email"),
+            'no_hp' => $this->input->post("edit_no_hp"),
+            'password' => md5($this->input->post("edit_password")),
+            'alamat' => $this->input->post("edit_alamat"),
             'role' => $this->input->post("roleUser"),
         );
 

@@ -4,25 +4,48 @@ $(document).ready(function() {
         const formEdit = $("#edit_kwitansi_form");
         getData();
 
+        $.validator.addMethod("valueNotEquals", function(value, element, arg){
+            return value !== '-';
+        }, "Pilihan tidak boleh sama.");
+
         formInput.validate({
             rules: {
                 insert_asal_perusahaan: {
-                    selectcheck: true
+                    required: true,
+                    valueNotEquals: true,
                 },
-                insert_sudah_terima_dari: "required",
-                insert_terbilang_uang: "required",
-                insert_nominal_uang: "required",
-                insert_untuk_pembayaran: "required",
+                insert_sudah_terima_dari: {
+                    required: true,
+                },
+                insert_terbilang_uang: {
+                    required: true,
+                },
+                insert_nominal_uang: {
+                    required: true,
+                },
+                insert_untuk_pembayaran: {
+                    required: true,
+                },
             },
             messages: {
-                insert_asal_perusahaan: "Masukkan asal perusahaan!",
-                insert_sudah_terima_dari: "Masukkan asal uang!",
-                insert_terbilang_uang: "Masukkan jumlah uang (terbilang)!",
-                insert_nominal_uang: "Masukkan jumlah uang (nominal)!",
-                insert_untuk_pembayaran: "Masukkan alasan pembayaran!",
+                insert_asal_perusahaan: {
+                    required: "Pilih asal perusahaan!",
+                    valueNotEquals: "Pilih asal perusahaan!",
+                },
+                insert_sudah_terima_dari: {
+                    required: "Masukkan asal uang!",
+                },
+                insert_terbilang_uang: {
+                    required: "Masukkan jumlah uang (terbilang)!",
+                },
+                insert_nominal_uang: {
+                    required: "Masukkan jumlah uang (nominal)!",
+                },
+                insert_untuk_pembayaran: {
+                    required: "Masukkan alasan pembayaran!",
+                }
             },
             submitHandler: function(formInput) {
-
                 Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?', 'Ya', 'Tidak',
                     function() {
                         // Yes button callback alert('Thank you.'); 
@@ -39,26 +62,38 @@ $(document).ready(function() {
 
         formEdit.validate({
             rules: {
-                edit_asal_perusahaan: {
-                    selectcheck: true
+                edit_sudah_terima_dari: {
+                    required: true,
                 },
-                edit_sudah_terima_dari: "required",
-                edit_terbilang_uang: "required",
-                edit_nominal_uang: "required",
-                edit_untuk_pembayaran: "required",
+                edit_terbilang_uang: {
+                    required: true,
+                },
+                edit_nominal_uang: {
+                    required: true,
+                },
+                edit_untuk_pembayaran: {
+                    required: true,
+                },
             },
             messages: {
-                edit_asal_perusahaan: "Masukkan asal perusahaan!",
-                edit_sudah_terima_dari: "Masukkan asal uang!",
-                edit_terbilang_uang: "Masukkan jumlah uang (terbilang)!",
-                edit_nominal_uang: "Masukkan jumlah uang (nominal)!",
-                edit_untuk_pembayaran: "Masukkan alasan pembayaran!",
+                edit_sudah_terima_dari: {
+                    required: "Masukkan asal uang!",
+                },
+                edit_terbilang_uang: {
+                    required: "Masukkan jumlah uang (terbilang)!",
+                },
+                edit_nominal_uang: {
+                    required: "Masukkan jumlah uang (nominal)!",
+                },
+                edit_untuk_pembayaran: {
+                    required: "Masukkan alasan pembayaran!",
+                }
             },
             submitHandler: function(formEdit) {
                 Notiflix.Confirm.Show('Konfirmasi Edit', 'Apakah data yang diinputkan sudah benar ?', 'Ya', 'Tidak',
                     function() {
                         // Yes button callback alert('Thank you.'); 
-                        let initialForm = formEdit[0];
+                        let initialForm = $("#edit_kwitansi_form")[0];
                         let formData = new FormData(initialForm);
                         editData(formData);
                     },
@@ -114,8 +149,10 @@ $(document).ready(function() {
                         id_kwitansi: "id_kwitansi"
                     },
                     render: function(data) {
-                        let statusButton = '<button class="btn btn-primary" type="button"  onclick="showModal(' + data.id_kwitansi + ')" ><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" data-original-title="Hapus Data Proyek" title="" onclick="deleteConfirmation(' + data.id_kwitansi + ')"><i class="fa fa-trash-o"></i></button>'
-                        return statusButton;
+                        let html = '<div class="btn-group" role="group" aria-label="First group">';
+                        html += '<button class="btn btn-primary" type="button"  onclick="showModal(' + data.id_kwitansi + ')" ><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" data-original-title="Hapus Data Proyek" title="" onclick="deleteConfirmation(' + data.id_kwitansi + ')"><i class="fa fa-trash-o"></i></button>'
+                        html += '</div>';
+                        return html;
                     }
                 },
                 {
@@ -134,6 +171,16 @@ $(document).ready(function() {
                 }
             ]
         })
+
+        $("#insert_nominal_uang").on('keyup', function(){
+            var n = parseInt($(this).val().replace(/\D/g,''),10);
+            $(this).val(n.toLocaleString());
+        });
+
+        $("#edit_nominal_uang").on('keyup', function(){
+            var n = parseInt($(this).val().replace(/\D/g,''),10);
+            $(this).val(n.toLocaleString());
+        });
     });
 
 
@@ -214,7 +261,7 @@ $(document).ready(function() {
 
     const editData = (formData) => {
         $.ajax({
-            url: 'data_kwitansi/ajaxUpdate',
+            url: 'form_kwitansi/ajaxUpdate',
             data: formData,
             type: 'POST',
             dataType: 'json',
@@ -301,12 +348,13 @@ $(document).ready(function() {
                     return;
                 }
 
+                let nominal_uang = parseInt(response.data.nominal_uang.replace(/\D/g,''),10);
                 $('#editModalLabel').text('Edit Data ' + response.data.no_kwitansi);
                 $('#edit_sudah_terima_dari').val(response.data.sudah_terima_dari);
                 $('#edit_terbilang_uang').val(response.data.terbilang_uang);
-                $('#edit_nominal_uang').val(response.data.nominal_uang);
+                $('#edit_nominal_uang').val(nominal_uang.toLocaleString());
                 $('#edit_untuk_pembayaran').val(response.data.untuk_pembayaran);
-                $('#editIDForm').val(response.data.id_proyek);
+                $('#idKwitansi').val(response.data.id_kwitansi);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert('Error showModal : ' + textStatus + ' ' + errorThrown);
@@ -360,7 +408,7 @@ $(document).ready(function() {
                 <div class="card-body">
                     <form id="insert_data_kwitansi_form">
                         <div class="row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="validationCustom01">Asal Perusahaan</label>
                                 <select class="form-control" name="insert_asal_perusahaan" id="insert_asal_perusahaan">
 									<option value="-">- Pilih Salah Satu -</option>
@@ -370,24 +418,24 @@ $(document).ready(function() {
 									<?php } ?>
 								</select>
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="validationCustom01">Sudah Terima Dari</label>
                                 <input class="form-control" id="insert_sudah_terima_dari" type="text"  placeholder="Sudah Terima Dari" name="insert_sudah_terima_dari">
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="validationCustom01">Banyaknya Uang (Terbilang)</label>
                                 <input class="form-control" id="insert_terbilang_uang" type="text" placeholder="Banyaknya Uang (Terbilang)" name="insert_terbilang_uang">
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="validationCustom01">Banyaknya Uang (Nominal)</label>
-                                <input class="form-control" id="insert_nominal_uang" type="number" placeholder="Banyaknya Uang (Nominal)" name="insert_nominal_uang">
+                                <input class="form-control" id="insert_nominal_uang" type="text" placeholder="Banyaknya Uang (Nominal)" name="insert_nominal_uang">
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-12 mb-3">
                                 <label for="validationCustom01">Untuk Pembayaran</label>
                                 <textarea class="form-control" id="insert_untuk_pembayaran" name="insert_untuk_pembayaran" rows="3" placeholder="Untuk Pembayaran"></textarea>
                             </div>
                         </div>
-                        <button class="btn btn-primary" id="btn_insert_kwitansi" type="submit">Simpan</button>
+                        <button class="btn btn-primary btn-block" id="btn_insert_kwitansi" type="submit">Simpan</button>
                     </form>
                 </div>
             </div>
@@ -421,22 +469,10 @@ $(document).ready(function() {
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" onclick="$('#editModal').modal('hide');" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="edit_kwitansi_form">
-                    <div class="row">
-                        <div class="col-md-12 mb-4">
-                            <label for="validationCustom01">Asal Perusahaan</label>
-                            <select class="form-control" name="edit_asal_perusahaan" id="edit_asal_perusahaan">
-                                <option value="-">- Pilih Salah Satu -</option>
-                                <?php 
-                                foreach($getPt as $row){?>
-                                    <option value="<?php echo $row->key_pt;?>"><?php echo $row->nama_pt;?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                    </div>
                     <div class="row">
                         <div class="col-md-12 mb-4">
                             <label for="validationCustom01">Sudah Terima Dari</label>
@@ -452,7 +488,7 @@ $(document).ready(function() {
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <label for="validationCustom01">Banyaknya Uang (Nominal)</label>
-                            <input class="form-control" id="edit_nominal_uang" type="number" placeholder="Banyaknya Uang (Nominal)" name="edit_nominal_uang">
+                            <input class="form-control" id="edit_nominal_uang" type="text" placeholder="Banyaknya Uang (Nominal)" name="edit_nominal_uang">
                         </div>
                     </div>
                     <div class="row">
@@ -463,7 +499,7 @@ $(document).ready(function() {
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <input class="form-control" type="text" id="editIDForm" name="idKwitansi" hidden>
+                            <input class="form-control" type="text" id="idKwitansi" name="idKwitansi" hidden>
                             <button class="btn btn-primary btn-block btn_modal_edit" type="submit">Simpan</button>
                         </div>
                     </div>

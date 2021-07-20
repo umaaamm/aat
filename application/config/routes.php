@@ -78,5 +78,8 @@ $route['data_proyek'] = 'data_proyek';
 //Data Alat
 $route['data_alat'] = 'data_alat';
 
-//Data Alat
+//Form Kwitansi
 $route['form_kwitansi'] = 'form_kwitansi';
+
+//Slip Gaji
+$route['slip_gaji'] = 'slip_gaji';

@@ -21,24 +21,32 @@ class Data_alat extends MY_Controller {
 
     public function getDataAlat() {
         $result = $this->db->query("select * from tbl_alat INNER JOIN tbl_kondisi_alat ON tbl_alat.kondisi_alat = tbl_kondisi_alat.id_kondisi");
-        if ($result->result_array()) {
+        if (!$result->result_array()) {
             $this->returnJson(
                 array(
-                    'status' => 'success',
-                    'message' => 'Proses mengambil data alat berhasil dilakukan.',
-                    'data' => $result->result_array()
+                    'status' => 'empty',
+                    'message' => 'Data alat masih kosong.',
                 )
             );
         };
+
+        $this->returnJson(
+            array(
+                'status' => 'success',
+                'message' => 'Proses mengambil data alat berhasil dilakukan.',
+                'data' => $result->result_array()
+            )
+        );
     }
 
     public function ajaxInsert()
     {
+        $jumlah_alat = !$this->input->post("insert_jumlah_alat") ? 0 : str_replace(',','',$this->input->post("insert_jumlah_alat"));
         $dataInsert = array(
             'merk_alat' => $this->input->post("insert_merk_alat"),
             'tahun_beli' => $this->input->post("insert_tahun_beli"),
             'seri_alat' => $this->input->post("insert_seri_alat"),
-            'jumlah_alat' => $this->input->post("insert_jumlah_alat"),
+            'jumlah_alat' => $jumlah_alat,
             'kondisi_alat' => $this->input->post("insert_kondisi_alat")
         );
 
@@ -122,12 +130,13 @@ class Data_alat extends MY_Controller {
 
     public function ajaxUpdate()
     {
+        $jumlah_alat = !$this->input->post("edit_jumlah_alat") ? 0 : str_replace(',','',$this->input->post("edit_jumlah_alat"));
         $dataUpdate = array(
-            'merk_alat' => $this->input->post("form_edit_merk_alat"),
-            'tahun_beli' => $this->input->post("form_edit_tahun_beli"),
-            'seri_alat' => $this->input->post("form_edit_seri_alat"),
-            'jumlah_alat' => $this->input->post("form_edit_jumlah_alat"),
-            'kondisi_alat' => $this->input->post("form_edit_kondisi_alat")
+            'merk_alat' => $this->input->post("edit_merk_alat"),
+            'tahun_beli' => $this->input->post("edit_tahun_beli"),
+            'seri_alat' => $this->input->post("edit_seri_alat"),
+            'jumlah_alat' => $jumlah_alat,
+            'kondisi_alat' => $this->input->post("edit_kondisi_alat")
         );
 
         $idAlat = array(

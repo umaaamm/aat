@@ -15,33 +15,31 @@ class Data_proyek extends MY_Controller {
     public function index()
     {
         $data['getPt'] = $this->getNamaPT();
-        $data['getProyek'] = $this->getProyek();
         $data['content']='v_data_proyek';
         $this->load->view('../../layout/views/master', $data);
     }
 
-    public function getProyek(){
-        $table = 'tbl_proyek';
-        $result = $this->db->query('select * from tbl_proyek join tbl_pt on tbl_proyek.id_pt = tbl_pt.id_pt');
-        if ($result){
-            $list = $result->result();
-        }
-        return $list;
-    }
-
     public function getDataProyek()
     {
-        $table = 'tbl_proyek';
         $result = $this->db->query('select * from tbl_proyek join tbl_pt on tbl_proyek.id_pt = tbl_pt.id_pt');
+        if (!$result->result_array()){
+            $this->returnJson(
+                array(
+                    'status' => 'empty',
+                    'message' => 'Data proyek masih kosong.',
+                )
+            );
+        }
+
         if ($result->result_array()) {
             $this->returnJson(
                 array(
                     'status' => 'success',
-                    'message' => 'Proses mengambil data material berhasil dilakukan.',
+                    'message' => 'Proses mengambil data proyek berhasil dilakukan.',
                     'data' => $result->result_array()
                 )
             );
-        }
+        };
     }
 
     public function ajaxInsert()
@@ -138,11 +136,11 @@ class Data_proyek extends MY_Controller {
     public function ajaxUpdate()
     {
         $dataUpdate = array(
-            'nama_proyek' => $this->input->post("form_edit_nama_proyek"),
-            'alamat_proyek' => $this->input->post("form_edit_alamat_proyek"),
-            'nama_pic' => $this->input->post("form_edit_nama_pic"),
-            'no_hp_pic' => $this->input->post("form_edit_no_hp_pic"),
-            'id_pt' => $this->input->post("form_edit_id_pt")
+            'nama_proyek' => $this->input->post("edit_nama_proyek"),
+            'alamat_proyek' => $this->input->post("edit_alamat_proyek"),
+            'nama_pic' => $this->input->post("edit_nama_pic"),
+            'no_hp_pic' => $this->input->post("edit_no_hp_pic"),
+            'id_pt' => $this->input->post("edit_id_pt")
         );
 
         $idMaterial = array(

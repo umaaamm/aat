@@ -4,16 +4,34 @@
         const formEdit = $("#edit_material_form");
         getData();
 
+        $.validator.addMethod("valueNotEquals", function(value, element, arg){
+            return value !== '-';
+        }, "Pilihan tidak boleh sama.");
+        
         formInput.validate({
             rules: {
-                insert_nama_material: "required",
-                insert_harga_material: "required",
-                insert_satuan_material: "required"
+                insert_nama_material: {
+                    required: true,
+                },
+                insert_harga_material: {
+                    required: true,
+                },
+                insert_satuan_material: {
+                    required: true,
+                    valueNotEquals: true,
+                },
             },
             messages: {
-                insert_nama_material: "Masukkan nama material !",
-                insert_harga_material: "Masukkan harga material !",
-                insert_satuan_material: "Pilih satuan material !",
+                insert_nama_material: {
+                    required: "Masukkan nama material !",
+                },
+                insert_harga_material: {
+                    required: "Masukkan harga material !",
+                },
+                insert_satuan_material: {
+                    required: "Pilih satuan material !",
+                    valueNotEquals: "Pilih satuan material !",
+                },
             },
             submitHandler: function(formInput) {
                 Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?', 'Ya', 'Tidak',
@@ -31,22 +49,40 @@
             }
         });
 
+        $.validator.addMethod("editValueNotEquals", function(value, element, arg){
+            return value !== '-';
+        }, "Pilihan tidak boleh sama.");
+
         formEdit.validate({
             rules: {
-                form_edit_nama_material: "required",
-                form_edit_harga_material: "required",
-                form_edit_satuan_material: "required"
+                edit_nama_material: {
+                    required: true,
+                },
+                edit_harga_material: {
+                    required: true,
+                },
+                edit_satuan_material: {
+                    required: true,
+                    editValueNotEquals: true,
+                },
             },
             messages: {
-                form_edit_nama_material: "Masukkan nama material !",
-                form_edit_harga_material: "Masukkan harga material !",
-                form_edit_satuan_material: "Pilih satuan material !",
+                edit_nama_material: {
+                    required: "Masukkan nama material !",
+                },
+                edit_harga_material: {
+                    required: "Masukkan harga material !",
+                },
+                edit_satuan_material: {
+                    required: "Pilih satuan material !",
+                    editValueNotEquals: "Pilih satuan material !",
+                },
             },
             submitHandler: function(formEdit) {
                 Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?', 'Ya', 'Tidak',
                     function() {
                         // Yes button callback alert('Thank you.'); 
-                        let initialForm = formEdit;
+                        let initialForm = $("#edit_material_form")[0];
                         let formData = new FormData(initialForm);
                         editData(formData);
                     },
@@ -70,7 +106,9 @@
                 },
                 {
                     title: "Harga Material",
-                    data: "harga_material"
+                    data: "harga_material",
+                    className: 'text-right',
+                    render: $.fn.dataTable.render.number(',', '.', 0, 'Rp. ')
                 },
                 {
                     title: "Satuan Material",
@@ -82,12 +120,24 @@
                         id_material: "id_material"
                     },
                     render: function(data) {
-                        let statusButton = '<button class="btn btn-primary" type="button"  onclick="showModal(' + data.id_material + ')" ><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" data-original-title="Hapus Data Material" title="" onclick="deleteConfirmation(' + data.id_material + ')"><i class="fa fa-trash-o"></i></button>'
-                        return statusButton;
+                        let html = '<div class="btn-group" role="group" aria-label="First group">';
+                        html += '<button class="btn btn-primary" type="button"  onclick="showModal(' + data.id_material + ')" ><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" data-original-title="Hapus Data Material" title="" onclick="deleteConfirmation(' + data.id_material + ')"><i class="fa fa-trash-o"></i></button>';
+                        html += '</div>';
+                        return html;
                     }
                 }
             ]
         })
+
+        $("#insert_harga_material").on('keyup', function(){
+            var n = parseInt($(this).val().replace(/\D/g,''),10);
+            $(this).val(n.toLocaleString());
+        });
+
+        $("#edit_harga_material").on('keyup', function(){
+            var n = parseInt($(this).val().replace(/\D/g,''),10);
+            $(this).val(n.toLocaleString());
+        });
     });
 
 
@@ -118,9 +168,8 @@
                 Notiflix.Loading.Remove();
             },
             success: function(response) {
-
                 if (response.status !== 'success') {
-                    Notiflix.Report.Failure('Terjadi Kesalahan', response.message, 'Tutup');
+                    $('#harga_material_table').dataTable().fnClearTable();
                     return;
                 }
 
@@ -253,10 +302,11 @@
                     return;
                 }
                 
+                let harga_material = parseInt(response.data.harga_material.replace(/\D/g,''),10);
                 $('#editModalLabel').text('Edit Data ' + response.data.nama_material);
                 $('#edit_nama_material').val(response.data.nama_material);
-                $('#edit_harga_material').val(response.data.harga_material);
-                $('#edit_id_satuan').val(response.data.satuan);
+                $('#edit_harga_material').val(harga_material.toLocaleString());
+                $('#edit_satuan_material').val(response.data.satuan);
                 $('#editIDForm').val(response.data.id_material);
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -322,7 +372,7 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="validationCustom01">Satuan</label>
-                                <select class="form-control digits" name="insert_satuan_material" id="insert_satuan_material">
+                                <select class="form-control" name="insert_satuan_material" id="insert_satuan_material">
 									<option value="-">- Pilih Salah Satu -</option>
 									<?php 
                                     foreach($dataSatuan as $row):?>
@@ -345,8 +395,8 @@
                 </div>
                 <div class="card-body">
                 <div class="table-responsive">
-                <table class="table table-border-horizontal" id="harga_material_table">
-                </table>
+                    <table class="table table-border-horizontal" id="harga_material_table">
+                    </table>
                 </div>
             </div>
             </div>
@@ -369,20 +419,20 @@
                 <form id="edit_material_form">
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="validationCustom01">Nama Material</label>
-                            <input class="form-control" id="edit_nama_material" type="text" placeholder="Nama Material" name="form_edit_nama_material" required="Nama Materia Tidak Boleh Kosong">
+                            <label for="edit_nama_material">Nama Material</label>
+                            <input class="form-control" id="edit_nama_material" type="text" placeholder="Nama Material" name="edit_nama_material">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="validationCustom01">Harga Material</label>
-                            <input class="form-control" id="edit_harga_material" type="text" placeholder="Harga Material" name="form_edit_harga_material" required="Harga Material Tidak Boleh Kosong">
+                            <label for="edit_harga_material">Harga Material</label>
+                            <input class="form-control" id="edit_harga_material" type="text" placeholder="Harga Material" name="edit_harga_material">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="validationCustom01">Satuan</label>
-                            <select class="form-control digits" name="form_edit_id_satuan" id="edit_id_satuan">
+                            <label for="edit_satuan_material">Satuan</label>
+                            <select class="form-control" name="edit_satuan_material" id="edit_satuan_material">
                                 <option value="-">- Pilih Salah Satu -</option>
                                 <?php 
                                 foreach($dataSatuan as $row):?>
@@ -393,7 +443,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <input class="form-control" type="text" id="editIDForm" name="idMaterial" hidden>
+                            <input class="form-control" type="text" id="idMaterial" name="idMaterial" hidden>
                             <button class="btn btn-primary btn-block btn_modal_edit" type="submit">Simpan</button>        
                         </div>
                     </div>

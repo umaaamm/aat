@@ -6,14 +6,26 @@
 
         formInput.validate({
             rules: {
-                insert_nama_karyawan: "required",
-                insert_no_hp_karyawan: "required",
-                insert_alamat_karyawan: "required"
+                insert_nama_karyawan: {
+                    required: true,
+                },
+                insert_no_hp_karyawan: {
+                    required: true,
+                },
+                insert_alamat_karyawan: {
+                    required: true,
+                },
             },
             messages: {
-                insert_nama_karyawan: "Masukkan nama karyawan !",
-                insert_no_hp_karyawan: "Masukkan no hp karyawan !",
-                insert_alamat_karyawan: "Masukkan alamat karyawan !"
+                insert_nama_karyawan: {
+                    required: "Masukkan nama karyawan !",
+                },
+                insert_no_hp_karyawan: {
+                    required: "Masukkan no hp karyawan !",
+                },
+                insert_alamat_karyawan: {
+                    required: "Masukkan alamat karyawan !",
+                }
             },
             submitHandler: function(formInput) {
                 Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?', 'Ya', 'Tidak',
@@ -33,20 +45,32 @@
 
         formEdit.validate({
             rules: {
-                form_edit_nama_karyawan: "required",
-                form_edit_alamat_karyawan: "required",
-                form_edit_no_hp_karyawan: "required"
+                edit_nama_karyawan: {
+                    required: true,
+                },
+                edit_alamat_karyawan: {
+                    required: true,
+                },
+                edit_no_hp_karyawan: {
+                    required: true,
+                },
             },
             messages: {
-                form_edit_nama_karyawan: "Masukkan nama karyawan !",
-                form_edit_alamat_karyawan: "Masukkan alamat karyawan !",
-                form_edit_no_hp_karyawan: "Masukkan no hp karyawan !",
+                edit_nama_karyawan: {
+                    required: "Masukkan nama karyawan !",
+                },
+                edit_alamat_karyawan: {
+                    required: "Masukkan alamat karyawan !",
+                },
+                edit_no_hp_karyawan: {
+                    required: "Masukkan no hp karyawan !",
+                },
             },
             submitHandler: function(formEdit) {
                 Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?', 'Ya', 'Tidak',
                     function() {
                         // Yes button callback alert('Thank you.'); 
-                        let initialForm = formEdit;
+                        let initialForm = $('#edit_karyawan_form')[0];
                         let formData = new FormData(initialForm);
                         editData(formData);
                     },
@@ -82,8 +106,10 @@
                         id_material: "id_karyawan"
                     },
                     render: function(data) {
-                        let statusButton = '<button class="btn btn-primary" type="button"  onclick="showModal(' + data.id_karyawan + ')" ><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" data-original-title="Hapus Data Material" title="" onclick="deleteConfirmation(' + data.id_karyawan + ')"><i class="fa fa-trash-o"></i></button>'
-                        return statusButton;
+                        let html = '<div class="btn-group" role="group" aria-label="First group">';
+                        html += '<button class="btn btn-primary" type="button"  onclick="showModal(' + data.id_karyawan + ')" ><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" data-original-title="Hapus Data Material" title="" onclick="deleteConfirmation(' + data.id_karyawan + ')"><i class="fa fa-trash-o"></i></button>'
+                        html += '</div>';
+                        return html;
                     }
                 }
             ]
@@ -118,7 +144,7 @@
             },
             success: function(response) {
                 if (response.status !== 'success') {
-                    Notiflix.Report.Failure('Terjadi Kesalahan', response.message, 'Tutup');
+                    $('#data_karyawan_table').dataTable().fnClearTable();
                     return;
                 }
 
@@ -311,18 +337,18 @@
                     <form id="insert_data_karyawan_form">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="validationCustom01">Nama Karyawan</label>
-                                <input class="form-control" type="text" placeholder="Nama Karyawan" name="insert_nama_karyawan" required="Nama Karyawan Tidak Boleh Kosong">
+                                <label for="insert_nama_karyawan">Nama Karyawan</label>
+                                <input class="form-control" type="text" placeholder="Nama Karyawan" name="insert_nama_karyawan">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="validationCustom01">No Hp Karyawan</label>
-                                <input class="form-control" type="text" placeholder="No Hp Karyawan" name="insert_no_hp_karyawan" required="No Hp Karyawan Tidak Boleh Kosong">
+                                <label for="insert_no_hp_karyawan">No Hp Karyawan</label>
+                                <input class="form-control" type="text" placeholder="No Hp Karyawan" name="insert_no_hp_karyawan">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="validationCustom01">Alamat Karyawan</label>
-                                <textarea class="form-control" name="insert_alamat_karyawan" rows="3" placeholder="Alamat Karyawan"></textarea>
+                                <label for="insert_alamat_karyawan">Alamat Karyawan</label>
+                                <textarea class="form-control" id="insert_alamat_karyawan" name="insert_alamat_karyawan" rows="3" placeholder="Alamat Karyawan"></textarea>
                             </div>
                         </div>
                         <button class="btn btn-primary btn-block" id="btn_insert_data_karyawan" type="submit">Simpan</button>
@@ -363,20 +389,20 @@
                 <form id="edit_karyawan_form">
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="validationCustom01">Nama Karyawan</label>
-                            <input class="form-control" type="text" placeholder="Nama Karyawan" id="edit_nama_karyawan" name="form_edit_nama_karyawan" required="Nama Karyawan Tidak Boleh Kosong">
+                            <label for="edit_nama_karyawan">Nama Karyawan</label>
+                            <input class="form-control" type="text" placeholder="Nama Karyawan" id="edit_nama_karyawan" name="edit_nama_karyawan">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="validationCustom01">No Hp Karyawan</label>
-                            <input class="form-control" type="text" placeholder="No Hp Karyawan" id="edit_no_hp_karyawan" name="form_edit_no_hp_karyawan" required="No Hp Karyawan Tidak Boleh Kosong">
+                            <label for="edit_no_hp_karyawan">No Hp Karyawan</label>
+                            <input class="form-control" type="text" placeholder="No Hp Karyawan" id="edit_no_hp_karyawan" name="edit_no_hp_karyawan">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="validationCustom01">Alamat Karyawan</label>
-                            <textarea class="form-control" id="edit_alamat_karyawan" name="form_edit_alamat_karyawan" rows="3" placeholder="Alamat Karyawan"></textarea>
+                            <label for="edit_alamat_karyawan">Alamat Karyawan</label>
+                            <textarea class="form-control" id="edit_alamat_karyawan" name="edit_alamat_karyawan" rows="3"></textarea>
                         </div>
                     </div>
                     <div class="row">

@@ -21,11 +21,20 @@ class Data_karyawan extends MY_Controller {
     public function getDataKaryawan(){
         $table = 'data_karyawan';
         $result = $this->BaseModel->getAllData($table);
+        if (!$result->result_array()){
+            $this->returnJson(
+                array(
+                    'status' => 'empty',
+                    'message' => 'Data karyawan masih kosong.',
+                )
+            );
+        }
+        
         if ($result->result_array()) {
             $this->returnJson(
                 array(
                     'status' => 'success',
-                    'message' => 'Proses mengambil data material berhasil dilakukan.',
+                    'message' => 'Proses mengambil data karyawan berhasil dilakukan.',
                     'data' => $result->result_array()
                 )
             );
@@ -121,9 +130,9 @@ class Data_karyawan extends MY_Controller {
     public function ajaxUpdate()
     {
         $dataUpdate = array(
-            'nama_karyawan' => $this->input->post("form_edit_nama_karyawan"),
-            'alamat_karyawan' => $this->input->post("form_edit_alamat_karyawan"),
-            'no_hp_karyawan' => $this->input->post("form_edit_no_hp_karyawan")
+            'nama_karyawan' => $this->input->post("edit_nama_karyawan"),
+            'alamat_karyawan' => $this->input->post("edit_alamat_karyawan"),
+            'no_hp_karyawan' => $this->input->post("edit_no_hp_karyawan")
         );
 
         $idMaterial = array(

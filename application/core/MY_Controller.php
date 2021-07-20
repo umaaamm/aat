@@ -30,6 +30,24 @@ class MY_Controller extends CI_Controller {
         return $list;
     }
 
+    public function getNamaProyek(){
+        $table = 'tbl_proyek';
+        $result = $this->BaseModel->getAllData($table);
+        if ($result){
+            $list = $result->result();
+        }
+        return $list;
+    }
+
+    public function getNamaKaryawan(){
+        $table = 'data_karyawan';
+        $result = $this->BaseModel->getAllData($table);
+        if ($result){
+            $list = $result->result();
+        }
+        return $list;
+    }
+
     public function createNoSurat($pt, $typeSurat){
         $data = $this->db->query("SELECT * FROM tbl_no_surat where type='".$typeSurat."' and key_perusahaan='".$pt."' ORDER BY id_surat DESC LIMIT 1")->result_array();
 

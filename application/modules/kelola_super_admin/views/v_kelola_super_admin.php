@@ -1,38 +1,53 @@
 <script>
     $(document).ready(function() {
-        const formInput = $("#insert_super_admin");
-        const formEdit = $("#edit_super_admin");
+        const formInput = $("#insert_super_admin_form");
+        const formEdit = $("#edit_super_admin_form");
         getData();
 
         formInput.validate({
             rules: {
-                insert_nama: "required",
+                insert_nama: {
+                    required: true,
+                },
                 insert_email: {
                     required: true,
                     email: true
                 },
-                insert_hp: "required",
+                insert_hp: {
+                    required: true,
+                },
                 insert_password: {
                     required: true,
                     minlength: 5
                 },
-                insert_alamat: "required"
+                insert_alamat: {
+                    required: true,
+                },
             },
             messages: {
-                insert_nama: "Masukkan nama super admin !",
-                insert_email: "Masukkan email super admin yang valid !",
-                insert_hp: "Masukkan nomor hp super admin !",
+                insert_nama: {
+                    required: "Masukkan nama super admin !",
+                },
+                insert_email: {
+                    required: "Masukkan email super admin !",
+                    email: "Masukkan email super admin yang valid !",
+                },
+                insert_hp: {
+                    required: "Masukkan nomor hp super admin !",
+                },
                 insert_password: {
                     required: "Masukkan password super admin !",
                     minlength: "Panjang password minimal 5 karakter !"
                 },
-                insert_alamat: "Masukkan alamat super admin !"
+                insert_alamat: {
+                    required: "Masukkan alamat super admin !"
+                },
             },
             submitHandler: function(formInput) {
                 Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?', 'Ya', 'Tidak',
                     function() {
                         // Yes button callback alert('Thank you.'); 
-                        let initialForm = $("#insert_super_admin")[0];
+                        let initialForm = $("#insert_super_admin_form")[0];
                         let formData = new FormData(initialForm);
                         insertData(formData);
                     },
@@ -45,33 +60,48 @@
 
         formEdit.validate({
             rules: {
-                editNamaForm: "required",
-                editEmailForm: {
+                edit_nama: {
+                    required: true,
+                },
+                edit_email: {
                     required: true,
                     email: true
                 },
-                editNoHPForm: "required",
-                editPasswordForm: {
+                edit_no_hp: {
+                    required: true,
+                },
+                edit_password: {
                     required: true,
                     minlength: 5
                 },
-                editAlamatForm: "required"
+                edit_alamat: {
+                    required: true,
+                },
             },
             messages: {
-                editNamaForm: "Masukkan nama super admin !",
-                editEmailForm: "Masukkan email super admin yang valid !",
-                editNoHPForm: "Masukkan nomor hp super admin !",
-                editPasswordForm: {
+                edit_nama: {
+                    required: "Masukkan nama super admin !",
+                },
+                edit_email: {
+                    required: "Masukkan email super admin !",
+                    email: "Masukkan email super admin yang valid !",
+                },
+                edit_no_hp: {
+                    required: "Masukkan nomor hp super admin !",
+                },
+                edit_password: {
                     required: "Masukkan password super admin !",
                     minlength: "Panjang password minimal 5 karakter !"
                 },
-                editAlamatForm: "Masukkan alamat super admin !"
+                edit_alamat: {
+                    required: "Masukkan alamat super admin !"
+                },
             },
             submitHandler: function(formEdit) {
                 Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?', 'Ya', 'Tidak',
                     function() {
                         // Yes button callback alert('Thank you.'); 
-                        let initialForm = formEdit;
+                        let initialForm = $("#edit_super_admin_form")[0];
                         let formData = new FormData(initialForm);
                         editData(formData);
                     },
@@ -101,10 +131,6 @@
                     data: "no_hp"
                 },
                 {
-                    title: "Password",
-                    data: "password"
-                },
-                {
                     title: "Alamat",
                     data: "alamat"
                 },
@@ -130,8 +156,10 @@
                         id_user: "id_user"
                     },
                     render: function(data) {
-                        let statusButton = '<button class="btn btn-primary" type="button"  onclick="showModal(' + data.id_user + ')" ><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" data-original-title="Hapus Data Admin" title="" onclick="deleteConfirmation(' + data.id_user + ')"><i class="fa fa-trash-o"></i></button>'
-                        return statusButton;
+                        let html = '<div class="btn-group" role="group" aria-label="First group">';
+                        html += '<button class="btn btn-primary" type="button"  onclick="showModal(' + data.id_user + ')" ><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" data-original-title="Hapus Data Admin" title="" onclick="deleteConfirmation(' + data.id_user + ')"><i class="fa fa-trash-o"></i></button>'
+                        html += '</div>';
+                        return html;
                     }
                 }
             ]
@@ -167,7 +195,7 @@
             },
             success: function(response) {
                 if (response.status !== 'success') {
-                    Notiflix.Report.Failure('Terjadi Kesalahan', response.message, 'Tutup');
+                    $('#super_admin_table').dataTable().fnClearTable();
                     return;
                 }
 
@@ -304,10 +332,10 @@
                 }
 
                 $('#editModalLabel').text('Edit Data ' + response.data.nama);
-                $('#editNamaForm').val(response.data.nama);
-                $('#editEmailForm').val(response.data.email);
-                $('#editNoHPForm').val(response.data.no_hp);
-                $('#editAlamatForm').val(response.data.alamat);
+                $('#edit_nama').val(response.data.nama);
+                $('#edit_email').val(response.data.email);
+                $('#edit_no_hp').val(response.data.no_hp);
+                $('#edit_alamat').val(response.data.alamat);
                 $('#editRoleForm').val(response.data.role);
                 $('#editIDForm').val(response.data.id_user);
 
@@ -364,32 +392,30 @@
 
                     <div class="card-body">
 
-                        <form id="insert_super_admin">
+                        <form id="insert_super_admin_form">
                             <div class="row">
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label for="insert_nama">Nama</label>
                                     <input id="insert_nama" class="form-control" type="text" placeholder="Nama Admin" name="insert_nama">
                                 </div>
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label for="insert_email">Email</label>
                                     <input id="insert_email" class="form-control" type="email" placeholder="Email Admin" name="insert_email">
                                 </div>
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label for="insert_hp">No Handphone</label>
                                     <input id="insert_hp" class="form-control" type="text" placeholder="Nomor HP Admin" name="insert_hp">
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label for="insert_password">Password</label>
                                     <input id="insert_password" class="form-control" type="password" placeholder="Password Admin" name="insert_password">
                                 </div>
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-12 mb-3">
                                     <label for="insert_alamat">Alamat</label>
-                                    <input id="insert_alamat" class="form-control" type="text" placeholder="alamat Admin" name="insert_alamat">
+                                    <textarea id="insert_alamat" class="form-control" type="text" placeholder="alamat Admin" rows="3" name="insert_alamat"></textarea>
                                 </div>
                             </div>
-                            <button class="btn btn-primary" id="btn_insert_super_admin" type="submit">Simpan</button>
+                            <button class="btn btn-primary btn-block" id="btn_insert_super_admin" type="submit">Simpan</button>
                         </form>
 
                     </div>
@@ -404,7 +430,6 @@
                     </div>
                     <div class="table-responsive">
                         <table class="table table-border-horizontal" id="super_admin_table">
-
                         </table>
                     </div>
                 </div>
@@ -421,42 +446,42 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" onclick="$('#editModal').modal('hide');" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="edit_super_admin">
+                <form id="edit_super_admin_form">
                     <div class="row">
-                        <div class="col-md-12 mb-12">
-                            <label for="editNamaForm">Nama</label>
-                            <input class="form-control" type="text" id="editNamaForm" name="editNamaForm">
+                        <div class="col-md-12 mb-3">
+                            <label for="edit_nama">Nama</label>
+                            <input class="form-control" type="text" id="edit_nama" name="edit_nama">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12 mb-12">
-                            <label for="editEmailForm">Email</label>
-                            <input class="form-control" type="email" placeholder="Email Admin" id="editEmailForm" name="editEmailForm">
+                        <div class="col-md-12 mb-3">
+                            <label for="edit_email">Email</label>
+                            <input class="form-control" type="email" placeholder="Email Admin" id="edit_email" name="edit_email">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12 mb-12">
-                            <label for="editNoHPForm">No Handphone</label>
-                            <input class="form-control" type="text" placeholder="Nomor HP Admin" id="editNoHPForm" name="editNoHPForm">
+                        <div class="col-md-12 mb-3">
+                            <label for="edit_no_hp">No Handphone</label>
+                            <input class="form-control" type="text" placeholder="Nomor HP Admin" id="edit_no_hp" name="edit_no_hp">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12 mb-12">
-                            <label for="editPasswordForm">Password</label>
-                            <input class="form-control" type="password" placeholder="Password Admin" id="editPasswordForm" name="editPasswordForm">
+                        <div class="col-md-12 mb-3">
+                            <label for="edit_password">Password</label>
+                            <input class="form-control" type="password" placeholder="Password Admin" id="edit_password" name="edit_password">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12 mb-12">
-                            <label for="editAlamatForm">Alamat</label>
-                            <input class="form-control" type="text" placeholder="alamat Admin" id="editAlamatForm" name="editAlamatForm">
+                        <div class="col-md-12 mb-3">
+                            <label for="edit_alamat">Alamat</label>
+                            <textarea id="edit_alamat" class="form-control" type="text" placeholder="alamat Admin" rows="3" name="edit_alamat"></textarea>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12 mb-12">
+                        <div class="col-md-12 mb-3">
                             <input class="form-control" type="text" id="editRoleForm" name="roleUser" hidden>
                             <input class="form-control" type="text" id="editIDForm" name="idUser" hidden>
                         </div>

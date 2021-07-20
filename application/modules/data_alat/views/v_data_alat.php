@@ -4,20 +4,46 @@
         const formEdit = $('#edit_alat_form');
         getData();
 
+        $.validator.addMethod("valueNotEquals", function(value, element, arg){
+            return value !== '-';
+        }, "Pilihan tidak boleh sama.");
+        
         formInput.validate({
             rules: {
-                insert_merk_alat: "required",
-                insert_tahun_beli: "required",
-                insert_seri_alat: "required",
-                insert_jumlah_alat: "required",
-                insert_kondisi_alat: "required"
+                insert_merk_alat: {
+                    required: true,
+                },
+                insert_tahun_beli: {
+                    required: true,
+                },
+                insert_seri_alat: {
+                    required: true,
+                },
+                insert_jumlah_alat: {
+                    required: true,
+                },
+                insert_kondisi_alat: {
+                    required: true,
+                    valueNotEquals: true,
+                },
             },
             messages: {
-                insert_merk_alat: "Masukkan merk alat !",
-                insert_tahun_beli: "Masukkan tahun beli !",
-                insert_seri_alat: "Masukkan seri alat !",
-                insert_jumlah_alat: "Masukkan jumlah alat !",
-                insert_kondisi_alat: "Pilih kondisi alat !",
+                insert_merk_alat: {
+                    required: "Masukkan merk alat !",
+                },
+                insert_tahun_beli: {
+                    required: "Masukkan tahun beli !",
+                },
+                insert_seri_alat: {
+                    required: "Masukkan seri alat !",
+                },
+                insert_jumlah_alat: {
+                    required: "Masukkan jumlah alat !",
+                },
+                insert_kondisi_alat: {
+                    required: "Pilih kondisi alat !",
+                    valueNotEquals: "Pilih kondisi alat !",
+                },
             },
             submitHandler: function(formInput) {
                 Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?', 'Ya', 'Tidak',
@@ -35,26 +61,52 @@
             }
         });
 
+        $.validator.addMethod("editValueNotEquals", function(value, element, arg){
+            return value !== '-';
+        }, "Pilihan tidak boleh sama.");
+
         formEdit.validate({
             rules: {
-                form_edit_merk_alat: "required",
-                form_edit_tahun_beli: "required",
-                form_edit_seri_alat: "required",
-                form_edit_jumlah_alat: "required",
-                form_edit_kondisi_alat: "required"
+                edit_merk_alat: {
+                    required: true,
+                },
+                edit_tahun_beli: {
+                    required: true,
+                },
+                edit_seri_alat: {
+                    required: true,
+                },
+                edit_jumlah_alat: {
+                    required: true,
+                },
+                edit_kondisi_alat: {
+                    required: true,
+                    editValueNotEquals: true,
+                },
             },
             messages: {
-                form_edit_merk_alat: "Masukkan merk alat !",
-                form_edit_tahun_beli: "Masukkan tahun beli !",
-                form_edit_seri_alat: "Masukkan seri alat !",
-                form_edit_jumlah_alat: "Masukkan jumlah alat !",
-                form_edit_kondisi_alat: "Pilih kondisi alat !",
+                edit_merk_alat: {
+                    required: "Masukkan merk alat !",
+                },
+                edit_tahun_beli: {
+                    required: "Masukkan tahun beli !",
+                },
+                edit_seri_alat: {
+                    required: "Masukkan seri alat !",
+                },
+                edit_jumlah_alat: {
+                    required: "Masukkan jumlah alat !",
+                },
+                edit_kondisi_alat: {
+                    required: "Pilih kondisi alat !",
+                    editValueNotEquals: "Pilih kondisi alat !",
+                },
             },
             submitHandler: function(formInput) {
                 Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?', 'Ya', 'Tidak',
                     function() {
                         // Yes button callback alert('Thank you.'); 
-                        let initialForm = formEdit[0];
+                        let initialForm = $('#edit_alat_form')[0];
                         let formData = new FormData(initialForm);
                         editData(formData);
                     },
@@ -87,7 +139,9 @@
                 },
                 {
                     title: "Jumlah Alat",
-                    data: "jumlah_alat"
+                    data: "jumlah_alat",
+                    className: 'text-right',
+                    render: $.fn.dataTable.render.number(',', '.', 0)
                 },
                 {
                     title: "Kondisi Alat",
@@ -99,11 +153,23 @@
                         id_alat: "id_alat"
                     },
                     render: function(data) {
-                        let statusButton = '<button class="btn btn-primary" type="button"  onclick="showModal(' + data.id_alat + ')" ><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" data-original-title="Hapus Data Alat" title="" onclick="deleteConfirmation(' + data.id_alat + ')"><i class="fa fa-trash-o"></i></button>'
-                        return statusButton;
+                        let html = '<div class="btn-group" role="group" aria-label="First group">';
+                        html += '<button class="btn btn-primary" type="button"  onclick="showModal(' + data.id_alat + ')" ><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" data-original-title="Hapus Data Alat" title="" onclick="deleteConfirmation(' + data.id_alat + ')"><i class="fa fa-trash-o"></i></button>'
+                        html += '</div>';
+                        return html;
                     }
                 }
             ]
+        });
+        
+        $("#insert_jumlah_alat").on('keyup', function(){
+            var n = parseInt($(this).val().replace(/\D/g,''),10);
+            $(this).val(n.toLocaleString());
+        });
+
+        $("#edit_jumlah_alat").on('keyup', function(){
+            var n = parseInt($(this).val().replace(/\D/g,''),10);
+            $(this).val(n.toLocaleString());
         });
     });
 
@@ -136,7 +202,7 @@
             success: function(response) {
                 console.log(response)
                 if (response.status !== 'success') {
-                    Notiflix.Report.Failure('Terjadi Kesalahan', response.message, 'Tutup');
+                    $('#data_alat_table').dataTable().fnClearTable();
                     return;
                 }
 
@@ -269,13 +335,14 @@
                     return;
                 }
 
+                let jumlah_alat = parseInt(response.data.jumlah_alat.replace(/\D/g,''),10);
                 $('#editModalLabel').text('Edit Data ' + response.data.merk_alat);
                 $('#edit_merk_alat').val(response.data.merk_alat);
                 $('#edit_tahun_beli').val(response.data.tahun_beli);
                 $('#edit_seri_alat').val(response.data.seri_alat);
-                $('#edit_jumlah_alat').val(response.data.jumlah_alat);
+                $('#edit_jumlah_alat').val(jumlah_alat.toLocaleString());
                 $('#edit_kondisi_alat').val(response.data.kondisi_alat);
-                $('#editIDForm').val(response.data.id_alat);
+                $('#idAlat').val(response.data.id_alat);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert('Error showModal : ' + textStatus + ' ' + errorThrown);
@@ -330,25 +397,25 @@
                 <div class="card-body">
                     <form id="insert_data_alat_form">
                         <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="validationCustom01">Merk Alat</label>
+                            <div class="col-md-6 mb-3">
+                                <label for="insert_merk_alat">Merk Alat</label>
                                 <input class="form-control" id="insert_merk_alat" type="text" placeholder="Merk Alat" name="insert_merk_alat" required="Merk Alat Tidak Boleh Kosong">
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="validationCustom01">Tahun Beli</label>
+                            <div class="col-md-6 mb-3">
+                                <label for="insert_tahun_beli">Tahun Beli</label>
                                 <input class="form-control" id="insert_tahun_beli" type="text" placeholder="Tahun Beli" name="insert_tahun_beli" required="Tahun Beli Tidak Boleh Kosong">
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="validationCustom01">Seri Alat</label>
+                            <div class="col-md-6 mb-3">
+                                <label for="insert_seri_alat">Seri Alat</label>
                                 <input class="form-control" id="insert_seri_alat" type="text" placeholder="Seri Alat" name="insert_seri_alat" required="Seri Alat Tidak Boleh Kosong">
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="validationCustom01">Jumlah Alat</label>
-                                <input class="form-control" id="insert_jumlah_alat" type="number" placeholder="Jumlah Alat" name="insert_jumlah_alat" required="Jumlah Alat Tidak Boleh Kosong">
+                            <div class="col-md-6 mb-3">
+                                <label for="insert_jumlah_alat">Jumlah Alat</label>
+                                <input class="form-control" id="insert_jumlah_alat" type="text" placeholder="Jumlah Alat" name="insert_jumlah_alat" required="Jumlah Alat Tidak Boleh Kosong">
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="validationCustom01">Kondisi Alat</label>
-                                <select class="form-control digits" name="insert_kondisi_alat" id="insert_kondisi_alat">
+                            <div class="col-md-12 mb-3">
+                                <label for="insert_kondisi_alat">Kondisi Alat</label>
+                                <select class="form-control" name="insert_kondisi_alat" id="insert_kondisi_alat">
 									<option value="-">- Pilih Salah Satu -</option>
 									<?php 
                                     foreach($dataKondisi as $row):?>
@@ -371,8 +438,8 @@
                 </div>
                 <div class="card-body">
                 <div class="table-responsive">
-                <table class="table table-border-horizontal" id="data_alat_table">
-                </table>
+                    <table class="table table-border-horizontal" id="data_alat_table">
+                    </table>
                 </div>
             </div>
             </div>
@@ -395,32 +462,32 @@
                 <form id="edit_alat_form">
                     <div class="row">
                         <div class="col-md-12 mb-4">
-                            <label for="validationCustom01">Merk Alat</label>
-                            <input class="form-control" id="edit_merk_alat" type="text" placeholder="Merk Alat" name="form_edit_merk_alat" required="Merk Alat Tidak Boleh Kosong">
+                            <label for="edit_merk_alat">Merk Alat</label>
+                            <input class="form-control" id="edit_merk_alat" type="text" placeholder="Merk Alat" name="edit_merk_alat">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-4">
-                            <label for="validationCustom01">Tahun Beli</label>
-                            <input class="form-control" id="edit_tahun_beli" type="text" placeholder="Tahun Beli" name="form_edit_tahun_beli" required="Tahun Beli Tidak Boleh Kosong">
+                            <label for="edit_tahun_beli">Tahun Beli</label>
+                            <input class="form-control" id="edit_tahun_beli" type="text" placeholder="Tahun Beli" name="edit_tahun_beli">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="validationCustom01">Seri Alat</label>
-                            <input class="form-control" id="edit_seri_alat" type="text" placeholder="Seri Alat" name="form_edit_seri_alat" required="Seri Alat Tidak Boleh Kosong">
+                            <label for="edit_seri_alat">Seri Alat</label>
+                            <input class="form-control" id="edit_seri_alat" type="text" placeholder="Seri Alat" name="edit_seri_alat">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="validationCustom01">Jumlah Alat</label>
-                            <input class="form-control" id="edit_jumlah_alat" type="number" placeholder="Jumlah Alat" name="form_edit_jumlah_alat" required="Jumlah Alat Tidak Boleh Kosong">
+                            <label for="edit_jumlah_alat">Jumlah Alat</label>
+                            <input class="form-control" id="edit_jumlah_alat" type="text" placeholder="Jumlah Alat" name="edit_jumlah_alat">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="validationCustom01">Kondisi Alat</label>
-                            <select class="form-control digits" name="form_edit_kondisi_alat" id="edit_kondisi_alat">
+                            <label for="edit_kondisi_alat">Kondisi Alat</label>
+                            <select class="form-control digits" name="edit_kondisi_alat" id="edit_kondisi_alat">
                                 <option value="-">- Pilih Salah Satu -</option>
                                 <?php 
                                 foreach($dataKondisi as $row):?>
@@ -431,7 +498,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <input class="form-control" type="text" id="editIDForm" name="idAlat" hidden>
+                            <input class="form-control" type="text" id="idAlat" name="idAlat" hidden>
                             <button class="btn btn-primary btn-block btn_modal_edit" type="submit">Simpan</button>
                         </div>
                     </div>

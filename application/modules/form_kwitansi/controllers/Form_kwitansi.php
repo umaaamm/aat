@@ -37,11 +37,12 @@ class Form_kwitansi extends MY_Controller {
 
     public function ajaxInsert()
     {
+        $nominal_uang = !$this->input->post("insert_nominal_uang") ? 0 : str_replace(',','',$this->input->post("insert_nominal_uang"));
         $dataInsert = array (
             'no_kwitansi' => $this->createNoSurat($this->input->post("insert_asal_perusahaan"), 'KW'),
             'sudah_terima_dari' => $this->input->post("insert_sudah_terima_dari"),
             'terbilang_uang' => $this->input->post("insert_terbilang_uang"),
-            'nominal_uang' => $this->input->post("insert_nominal_uang"),
+            'nominal_uang' => $nominal_uang,
             'untuk_pembayaran' => $this->input->post("insert_untuk_pembayaran"),
             'tanggal' => date("Y-m-d")
         );
@@ -98,14 +99,14 @@ class Form_kwitansi extends MY_Controller {
 
     public function ajaxUpdate()
     {
+        $nominal_uang = !$this->input->post("edit_nominal_uang") ? 0 : str_replace(',','',$this->input->post("edit_nominal_uang"));
         $dataUpdate = array(
-            'no_kwitansi' => $this->createNoSurat($this->input->post("insert_asal_perusahaan"), 'KW'),
-            'sudah_terima_dari' => $this->input->post("insert_sudah_terima_dari"),
-            'terbilang_uang' => $this->input->post("insert_terbilang_uang"),
-            'nominal_uang' => $this->input->post("insert_nominal_uang"),
-            'untuk_pembayaran' => $this->input->post("insert_untuk_pembayaran"),
-            'tanggal' => date("Y-m-d")
+            'sudah_terima_dari' => $this->input->post("edit_sudah_terima_dari"),
+            'terbilang_uang' => $this->input->post("edit_terbilang_uang"),
+            'nominal_uang' => $nominal_uang,
+            'untuk_pembayaran' => $this->input->post("edit_untuk_pembayaran"),
         );
+
 
         $idKwitansi = array(
             'id_kwitansi' => $this->input->post('idKwitansi')
@@ -145,13 +146,6 @@ class Form_kwitansi extends MY_Controller {
 
 
         if(!$result){
-            // $position = strpos($result->no_kwitansi,'SSM');
-            // if($position){
-            //     echo "Ada";
-            // }else{
-            //     echo "Tidak Ada";
-            // }
-            // echo "<pre>";print_r($result);echo "</pre>";exit;
             redirect('form_kwitansi');
         }
         $noKwitansi = str_replace('/','-',$result->no_kwitansi);
