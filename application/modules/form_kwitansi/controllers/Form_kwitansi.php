@@ -24,15 +24,22 @@ class Form_kwitansi extends MY_Controller {
     {
         $table = 'tbl_kwitansi';
         $result = $this->BaseModel->getAllData($table);
-        if ($result->result_array()) {
-            $this->returnJson(
-                array(
-                    'status' => 'success',
-                    'message' => 'Proses mengambil data kwitansi berhasil dilakukan.',
-                    'data' => $result->result_array()
-                )
-            );
-        };
+		if (!$result->result_array()){
+			$this->returnJson(
+				array(
+					'status' => 'empty',
+					'message' => 'Data material masih kosong.',
+				)
+			);
+		}
+
+		$this->returnJson(
+			array(
+				'status' => 'success',
+				'message' => 'Proses mengambil data kwitansi berhasil dilakukan.',
+				'data' => $result->result_array()
+			)
+		);
     }
 
     public function ajaxInsert()
