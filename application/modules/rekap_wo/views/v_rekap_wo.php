@@ -89,63 +89,150 @@ $(document).ready(function() {
         });
     });
 
-    formInput.validate({
-        rules: {
-            perusahaan_rekanan: "required",
-            id_proyek: "required",
-            id_work_order: "required",
-            tanggal: "required",
-            insert_nilai_kontrak: "required",
-            id_pph: "required",
-            id_ppn: "required",
-        },
-        messages: {
-            perusahaan_rekanan: "Pilih perusahaan rekanan!",
-            id_proyek: "Pilih nama proyek!",
-            id_work_order: "Masukkan Work Order!",
-            tanggal: "Masukkan tanggal!",
-            insert_nilai_kontrak: "Masukkan nilai kontrak!",
-            id_pph: "Masukkan pph!",
-            id_ppn: "Masukkan ppn!",
-        },
-        submitHandler: function(formInput) {
+	$.validator.addMethod("valueNotEquals", function(value, element, arg){
+		return value !== '-';
+	}, "Pilihan tidak boleh sama.");
 
-            Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?',
-                'Ya', 'Tidak',
-                function() {
-                    let initialForm = $("#insert_rekap_wo_form")[0];
-                    let formData = new FormData(initialForm);
-                    insertData(formData);
-                },
-                function() {
-                    return;
-                }
-            );
-        }
-    });
+	formInput.validate({
+		rules: {
+			insert_id_rekanan_perusahaan: {
+				required: true,
+				valueNotEquals: true,
+			},
+			insert_id_proyek: {
+				required: true,
+				valueNotEquals: true,
+			},
+			insert_work_order: {
+				required: true
+			},
+			insert_tanggal: {
+				required: true
+			},
+			insert_nilai_kontrak: {
+				required: true
+			},
+			insert_ppn: {
+				required: true
+			},
+			insert_pph: {
+				required: true
+			},
+			insert_tagihan_faktur: {
+				required: true
+			},
+			insert_rekening_koran: {
+				required: true
+			}
+		},
+		messages: {
+			insert_id_rekanan_perusahaan: {
+				required: "Pilih perusahaan rekanan !",
+				valueNotEquals: "Pilih perusahaan rekanan !"
+			},
+			insert_id_proyek: {
+				required: "Pilih nama proyek !",
+				valueNotEquals: "Pilih nama proyek !"
+			},
+			insert_work_order: {
+				required: "Masukkan Work Order !",
+			},
+			insert_tanggal: {
+				required: "Masukkan tanggal !",
+			},
+			insert_nilai_kontrak: {
+				required: "Masukkan nilai kontrak !",
+			},
+			insert_ppn: {
+				required: "Masukkan pph !",
+			},
+			insert_pph: {
+				required: "Masukkan ppn !",
+			},
+			insert_tagihan_faktur: {
+				required: "Masukkan tagihan faktur !",
+			},
+			insert_rekening_koran: {
+				required: "Masukkan rekening koran !",
+			}
+		},
+		submitHandler: function(formInput) {
+			Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?',
+				'Ya', 'Tidak',
+				function() {
+					let initialForm = $("#insert_rekap_wo_form")[0];
+					let formData = new FormData(initialForm);
+					insertData(formData);
+				},
+				function() {
+					return;
+				}
+			);
+		}
+	});
 
     formEdit.validate({
         rules: {
-        perusahaan_rekanan_modal: "required",
-        id_proyek_modal: "required",
-        edit_id_work_order: "required",
-        edit_tanggal: "required",
-        edit_nilai_kontrak: "required",
-        edit_id_ppn: "required",
-        edit_id_pph: "required",
-        edit_id_tagihan_faktur: "required",
-        edit_id_rekening_koran: "required",
+			edit_id_rekanan_perusahaan: {
+				required: true,
+				valueNotEquals: true,
+			},
+			edit_id_proyek: {
+				required: true,
+				valueNotEquals: true,
+			},
+			edit_work_order: {
+				required: true
+			},
+			edit_tanggal: {
+				required: true
+			},
+			edit_nilai_kontrak: {
+				required: true
+			},
+			edit_ppn: {
+				required: true
+			},
+			edit_pph: {
+				required: true
+			},
+			edit_tagihan_faktur: {
+				required: true
+			},
+			edit_rekening_koran: {
+				required: true
+			}
         },
         messages: {
-            perusahaan_rekanan_modal: "Pilih perusahaan rekanan!",
-            id_proyek_modal: "Pilih nama proyek!",
-            edit_id_work_order: "Masukkan Work Order!",
-            edit_tanggal: "Masukkan tanggal!",
-            edit_nilai_kontrak: "Masukkan nilai kontrak!",
-            edit_id_ppn: "Masukkan ppn!",
-            edit_id_pph: "Masukkan pph!",
-            edit_id_tagihan_faktur: "Masukkan tagihan faktur!",
-            edit_id_rekening_koran: "Masukkan rekening koran!",
+			edit_id_rekanan_perusahaan: {
+				required: "Pilih perusahaan rekanan !",
+				valueNotEquals: "Pilih perusahaan rekanan !"
+			},
+			edit_id_proyek: {
+				required: "Pilih nama proyek !",
+				valueNotEquals: "Pilih nama proyek !"
+			},
+			edit_work_order: {
+				required: "Masukkan Work Order !",
+			},
+			edit_tanggal: {
+				required: "Masukkan tanggal !",
+			},
+			edit_nilai_kontrak: {
+				required: "Masukkan nilai kontrak !",
+			},
+			edit_ppn: {
+				required: "Masukkan pph !",
+			},
+			edit_pph: {
+				required: "Masukkan ppn !",
+			},
+			edit_tagihan_faktur: {
+				required: "Masukkan tagihan faktur !",
+			},
+			edit_rekening_koran: {
+				required: "Masukkan rekening koran !",
+			}
         },
         submitHandler: function(formEdit) {
             Notiflix.Confirm.Show('Konfirmasi Input', 'Apakah data yang diinputkan sudah benar ?',
@@ -157,7 +244,8 @@ $(document).ready(function() {
                 },
                 function() {
                     return;
-                });
+                }
+			);
         }
     });
 
@@ -245,7 +333,8 @@ const deleteConfirmation = (id) => {
         },
         function() {
             return;
-        });
+        }
+	);
 }
 
 const getData = () => {
@@ -485,67 +574,55 @@ const showModal = (id) => {
                                         <option value=""> - Pilih Salah Satu -</option>
                                     </select>
                                 </div>
-                            </div>
 
-                            <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label for="insert_id_proyek">Nama Proyek/Pekerjaan</label>
                                     <select class="form-control" name="insert_id_proyek" id="id_proyek">
                                         <option value="">- Pilih Salah Satu -</option>
                                     </select>
                                 </div>
-                            </div>
 
-                            <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label for="insert_pph">Work Order</label>
                                     <input class="form-control" type="text" id="id_work_order" placeholder="Work Order"
                                         name="insert_work_order" required="Work Order Tidak Boleh Kosong">
                                 </div>
-                            </div>
 
-                            <div class="form-group row">
-                                <label class="col-lg-12 control-label text-lg-left" for="Tanggal">Tanggal</label>
-                                <div class="col-lg-4">
+                            	<div class="form-group col-md-4 mb-3">
+                                	<label class="control-label text-lg-left" for="Tanggal">Tanggal</label>
                                     <input class="datepicker-here form-control" id="tanggal" name="insert_tanggal"
                                         type="text" data-language="en" data-multiple-dates-separator=", "
                                         data-position="bottom left" placeholder="Tanggal" data-original-title=""
                                         title="">
-                                </div>
-                            </div>
+                            	</div>
 
-                            <div class="row">
+
                                 <div class="col-md-4 mb-3">
                                     <label for="insert_nilai_kontrak">Nilai Kontrak</label>
                                     <input class="form-control" type="text" onchange="calculateAmount(this.value)"
                                         placeholder="Nilai Kontrak" id="insert_nilai_kontrak"
                                         name="insert_nilai_kontrak" required="Nilai Kontrak tidak boleh kosong">
                                 </div>
-                            </div>
-                            <div class="row">
+
                                 <div class="col-md-4 mb-3">
                                     <label for="insert_ppn">PPN 10%</label>
                                     <input class="form-control" type="text" id="id_ppn" placeholder="PPN 10%"
                                         name="insert_ppn" required="PPN 10% Tidak Boleh Kosong" readonly>
                                 </div>
-                            </div>
-                            <div class="row">
+
                                 <div class="col-md-4 mb-3">
                                     <label for="insert_pph">PPH 2%</label>
                                     <input class="form-control" type="text" id="id_pph" placeholder="PPH 2%"
                                         name="insert_pph" required="PPH 2% Tidak Boleh Kosong" readonly>
                                 </div>
-                            </div>
 
-                            <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label for="insert_ppn">Tagihan Faktur</label>
                                     <input class="form-control" type="text" id="id_tagihan_faktur"
                                         placeholder="Tagihan Faktur" name="insert_tagihan_faktur"
                                         required="Tagihan Faktur Tidak Boleh Kosong" readonly>
                                 </div>
-                            </div>
-                            <div class="row">
+
                                 <div class="col-md-4 mb-3">
                                     <label for="insert_pph">Rekening Koran</label>
                                     <input class="form-control" type="text" id="id_rekening_koran"
@@ -613,26 +690,26 @@ const showModal = (id) => {
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-12 mb-3">
                             <label for="edit_id_work_order">Work Order</label>
                             <input class="form-control" type="text" id="edit_id_work_order" placeholder="Work Order"
-                                name="form_edit_work_order" required="Work Order Tidak Boleh Kosong">
+                                name="edit_work_order" required="Work Order Tidak Boleh Kosong">
                         </div>
                     </div>
-                    <div class="form-group row">
-                                <label class="col-lg-12 control-label text-lg-left" for="Tanggal">Tanggal</label>
-                                <div class="col-lg-4">
-                                    <input class="datepicker-here form-control" id="edit_tanggal" name="edit_tanggal"
-                                        type="text" data-language="en" data-multiple-dates-separator=", "
-                                        data-position="bottom left" placeholder="Tanggal" data-original-title=""
-                                        title="">
-                                </div>
-                            </div>
+					<div class="row">
+						<div class="form-group col-md-12 mb-3">
+							<label for="edit_tanggal">Tanggal</label>
+							<input class="datepicker-here form-control" id="edit_tanggal" name="edit_tanggal"
+								   type="text" data-language="en" data-multiple-dates-separator=", "
+								   data-position="bottom left" placeholder="Tanggal" data-original-title=""
+								   title="">
+						</div>
+					</div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="validationCustom01">Nilai Kontrak</label>
+                            <label for="edit_nilai_kontrak">Nilai Kontrak</label>
                             <input class="form-control" id="edit_nilai_kontrak" type="text" onchange="calculateAmountEdit(this.value)" placeholder="Nilai Kontrak"
-                                name="form_edit_nilai_kontrak" required="Nama Proyek Tidak Boleh Kosong">
+                                name="edit_nilai_kontrak" required="Nama Proyek Tidak Boleh Kosong">
                         </div>
                     </div>
                     <div class="row">
@@ -649,7 +726,6 @@ const showModal = (id) => {
                                 name="edit_pph" required="PPH 2% Tidak Boleh Kosong" readonly>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <label for="edit_id_tagihan_faktur">Tagihan Faktur</label>
