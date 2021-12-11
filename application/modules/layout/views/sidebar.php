@@ -45,7 +45,7 @@
                     <li><a href="<?php echo base_url()?>kelola_admin">Input Laporan Bulanan</a></li>
                     <li><a href="<?php echo base_url()?>kelola_admin">Netto Proyek</a></li>
                     <li><a href="<?php echo base_url()?>kelola_admin">Rekap Piutang Owner</a></li>
-                    <li><a href="<?php echo base_url()?>kelola_admin">Rekap Data WO</a></li>
+                    <li><a href="<?php echo base_url()?>rekap_wo">Rekap Data WO</a></li>
                 </ul>
                 </li>
                 <li class="dropdown"><a class="nav-link menu-title" href="#"><i data-feather="airplay"></i><span>Manajemen Form</span></a>

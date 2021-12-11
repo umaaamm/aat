@@ -352,14 +352,14 @@ const showModal = (id) => {
                                                 </div>
                                                 <!-- Text input-->
                                                 <div class="form-group row">
-                                                        <label class="col-lg-12 control-label text-lg-left"
-                                                            for="textinput">Saldo</label>
-                                                        <div class="col-lg-12">
-                                                            <input id="textinput" name="saldo" type="text"
-                                                                placeholder="Saldo"
-                                                                class="form-control btn-square input-md">
-                                                        </div>
+                                                    <label class="col-lg-12 control-label text-lg-left"
+                                                        for="textinput">Saldo</label>
+                                                    <div class="col-lg-12">
+                                                        <input id="textinput" name="saldo" type="text"
+                                                            placeholder="Saldo"
+                                                            class="form-control btn-square input-md">
                                                     </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -414,8 +414,8 @@ const showModal = (id) => {
                                         <div class="card-body animate-chk">
                                             <div class="row">
                                                 <div class="col">
-                                                        <!-- Text input-->
-                                                        <div class="form-group row">
+                                                    <!-- Text input-->
+                                                    <div class="form-group row">
                                                         <label class="col-lg-12 control-label text-lg-left"
                                                             for="Tanggal">Tanggal</label>
                                                         <div class="col-lg-12">
@@ -426,7 +426,7 @@ const showModal = (id) => {
                                                                 data-original-title="" title="">
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <!-- Text input-->
                                                     <div class="form-group row">
                                                         <label class="col-lg-12 control-label text-lg-left"
@@ -449,8 +449,8 @@ const showModal = (id) => {
                                                         </div>
                                                     </div>
 
-                                                     <!-- Text input-->
-                                                     <div class="form-group row">
+                                                    <!-- Text input-->
+                                                    <div class="form-group row">
                                                         <label class="col-lg-12 control-label text-lg-left"
                                                             for="Satuan">Satuan</label>
                                                         <div class="col-lg-12">
@@ -461,14 +461,14 @@ const showModal = (id) => {
                                                         </div>
                                                     </div>
 
-                                                
+
 
                                                     <!-- Select Basic -->
                                                     <div class="form-group row">
                                                         <label class="col-lg-12 control-label text-lg-left"
                                                             for="Jenis">Kredit</label>
                                                         <div class="col-lg-12">
-                                                        <input id="Kredit" name="Kredit" type="text"
+                                                            <input id="Kredit" name="Kredit" type="text"
                                                                 placeholder="Kredit"
                                                                 class="form-control btn-square input-md">
                                                         </div>
@@ -479,15 +479,15 @@ const showModal = (id) => {
                                                         <label class="col-lg-12 control-label text-lg-left"
                                                             for="Jenis">Debit</label>
                                                         <div class="col-lg-12">
-                                                        <input id="Debit" name="Debit" type="text"
+                                                            <input id="Debit" name="Debit" type="text"
                                                                 placeholder="Debit"
                                                                 class="form-control btn-square input-md">
                                                         </div>
                                                     </div>
 
-                                                   
 
-                                                    
+
+
 
                                                     <a href="javascript:void(0);" class="add_button btn btn btn-primary"
                                                         title="Tambah Keterangan">Tambah Keterangan</i></a>
@@ -625,8 +625,9 @@ $(document).ready(function() {
     var addButton = $('.add_button'); //Add button selector
     var wrapper = $('.field_wrapper'); //Input field wrapper
     // <input class="form-control" type="text" placeholder="Nama field" name="field_name[]" required="Nama field">
-    var fieldHTML ='<div class="col-md-6"> <div class="card"> <div class="card-body animate-chk"> <div class="row"> <div class="col"> <!-- Text input--> <div class="form-group row"> <label class="col-lg-12 control-label text-lg-left" for="Qyt">Quantity</label> <div class="col-lg-12"> <input id="Qyt" name="Qyt" type="text" placeholder="Quantity" class="form-control btn-square input-md"></div> </div><!-- Text input--> <div class="form-group row"> <label class="col-lg-12 control-label text-lg-left" for="Tanggal">Tanggal</label> <div class="col-lg-12"> <input class="datepicker-here form-control digits" name="tanggal" type="text" data-language="en" data-multiple-dates-separator=", " data-position="bottom left" placeholder="Tanggal" data-original-title="" title=""> </div> </div><!-- Select Basic --> <div class="form-group row"> <label class="col-lg-12 control-label text-lg-left" for="Jenis">Jenis</label> <div class="col-lg-12"> <select id="Jenis" name="Jenis" class="form-control btn-square"> <option value="Kredit">Kredit</option> <option value="Debit">Debit</option> </select> </div> </div><!-- Text input--> <div class="form-group row"> <label class="col-lg-12 control-label text-lg-left" for="Satuan">Satuan</label> <div class="col-lg-12"> <input id="Satuan" name="Satuan" type="text" placeholder="Satuan" class="form-control btn-square input-md"></div></div><!-- Text input--> <div class="form-group row"> <label class="col-lg-12 control-label text-lg-left" for="textinput">Saldo</label> <div class="col-lg-12"> <input id="textinput" name="saldo" type="text" placeholder="Saldo" class="form-control btn-square input-md"> </div> </div><a href="javascript:void(0);" class="btn btn-danger remove_button" title="Hapus Keterangan">Hapus Keterangan</i></a></div> </div> </div> </div> </div>'
-        // '<div class="row"><div class="col-md-4 mb-3"><div class="input-group"><input type="text" name="field_name[]" class="form-control" value=""/><a href="javascript:void(0);" class="btn btn-danger remove_button"><i class="fa fa-minus"></i></a></div></div></div></div>'; //New input field html 
+    var fieldHTML =
+        '<div class="col-md-6"> <div class="card"> <div class="card-body animate-chk"> <div class="row"> <div class="col"> <!-- Text input--> <div class="form-group row"> <label class="col-lg-12 control-label text-lg-left" for="Qyt">Quantity</label> <div class="col-lg-12"> <input id="Qyt" name="Qyt" type="text" placeholder="Quantity" class="form-control btn-square input-md"></div> </div><!-- Text input--> <div class="form-group row"> <label class="col-lg-12 control-label text-lg-left" for="Tanggal">Tanggal</label> <div class="col-lg-12"> <input class="datepicker-here form-control digits" name="tanggal" type="text" data-language="en" data-multiple-dates-separator=", " data-position="bottom left" placeholder="Tanggal" data-original-title="" title=""> </div> </div><!-- Select Basic --> <div class="form-group row"> <label class="col-lg-12 control-label text-lg-left" for="Jenis">Jenis</label> <div class="col-lg-12"> <select id="Jenis" name="Jenis" class="form-control btn-square"> <option value="Kredit">Kredit</option> <option value="Debit">Debit</option> </select> </div> </div><!-- Text input--> <div class="form-group row"> <label class="col-lg-12 control-label text-lg-left" for="Satuan">Satuan</label> <div class="col-lg-12"> <input id="Satuan" name="Satuan" type="text" placeholder="Satuan" class="form-control btn-square input-md"></div></div><!-- Text input--> <div class="form-group row"> <label class="col-lg-12 control-label text-lg-left" for="textinput">Saldo</label> <div class="col-lg-12"> <input id="textinput" name="saldo" type="text" placeholder="Saldo" class="form-control btn-square input-md"> </div> </div><a href="javascript:void(0);" class="btn btn-danger remove_button" title="Hapus Keterangan">Hapus Keterangan</i></a></div> </div> </div> </div> </div>'
+    // '<div class="row"><div class="col-md-4 mb-3"><div class="input-group"><input type="text" name="field_name[]" class="form-control" value=""/><a href="javascript:void(0);" class="btn btn-danger remove_button"><i class="fa fa-minus"></i></a></div></div></div></div>'; //New input field html 
     var x = 1; //Initial field counter is 1
 
     //Once add button is clicked
