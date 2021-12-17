@@ -67,7 +67,9 @@
                 insert_qyt: "required",
                 insert_satuan: "required",
                 insert_kredit: "required",
-                insert_debit: "required"
+                insert_debit: "required",
+                insert_id_status_bayar: "required",
+                insert_id_keterangan: "required"
             },
             messages: {
                 insert_id_laporan_harian: "Masukkan nama perusahaan rekanan!",
@@ -75,7 +77,9 @@
                 insert_qyt: "Masukkan Qyt!",
                 insert_satuan: "Masukkan Satuan!",
                 insert_kredit: "Masukkan Nomonila Kredit!",
-                insert_debit: "Masukkan Nominal Debit!"
+                insert_debit: "Masukkan Nominal Debit!",
+                insert_id_status_bayar: "Masukkan Keterangan!",
+                insert_id_keterangan: "Masukkan Keterangan Status!"
             },
             submitHandler: function(formKeterangan) {
 
@@ -247,6 +251,14 @@
                 {
                     title: "Debit",
                     data: "debit"
+                },
+                {
+                    title: "Keterangan",
+                    data: "value_keterangan"
+                },
+                {
+                    title: "Keterangan Bayar",
+                    data: "value_status"
                 },
                 {
                     title: "Action",
@@ -747,6 +759,28 @@
                                     <div class="col-md-6 mb-3">
                                         <label for="insert_debit">Debit</label>
                                         <input class="form-control" type="text" id="id_debit" placeholder="Debit" name="insert_debit" required="Debit Tidak Boleh Kosong">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="insert_pph">Keterangan</label>
+                                        <select class="form-control digits" name="insert_id_keterangan" id="insert_id_keterangan">
+                                            <option value="-">- Pilih Salah Satu -</option>
+                                            <?php
+                                            foreach ($getKeterangan as $row) : ?>
+                                                <option value="<?php echo $row->id_keterangan; ?>">
+                                                    <?php echo $row->value_keterangan; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="insert_pph">Keterangan Status Bayar</label>
+                                        <select class="form-control digits" name="insert_id_status_bayar" id="insert_id_status_bayar">
+                                            <option value="-">- Pilih Salah Satu -</option>
+                                            <?php
+                                            foreach ($getStatusBayar as $row) : ?>
+                                                <option value="<?php echo $row->id_keterangan_status; ?>">
+                                                    <?php echo $row->value_status; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
                                     </div>
                                 </div>
 

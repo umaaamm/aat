@@ -18,6 +18,8 @@ class Laporan_harian extends MY_Controller
         $data['getPt'] = $this->getNamaPT();
         $data['getProyek'] = $this->getProyek();
         $data['getLaporanHarian'] = $this->getLaporanHarian();
+        $data['getKeterangan'] = $this->getKeterangan();
+        $data['getStatusBayar'] = $this->getStatusBayar();
         $data['content'] = 'v_laporan_harian';
         $this->load->view('../../layout/views/master', $data);
     }
@@ -49,7 +51,7 @@ class Laporan_harian extends MY_Controller
     public function getDetailDataLaporanHarian()
     {
         $id_laporan_harian = $this->input->post('id_laporan_harian');
-        $result = $this->db->query('select * from tbl_laporan_harian join tbl_perusahaan_rekanan on tbl_laporan_harian.id_perusahaan_rekanan = tbl_perusahaan_rekanan.id_perusahaan_rekanan join tbl_proyek on tbl_laporan_harian.id_proyek = tbl_proyek.id_proyek join tbl_data_laporan_harian on tbl_laporan_harian.id_laporan_harian = tbl_data_laporan_harian.id_laporan_harian WHERE tbl_laporan_harian.id_laporan_harian = "' . $id_laporan_harian . '"');
+        $result = $this->db->query('select * from tbl_laporan_harian join tbl_perusahaan_rekanan on tbl_laporan_harian.id_perusahaan_rekanan = tbl_perusahaan_rekanan.id_perusahaan_rekanan join tbl_proyek on tbl_laporan_harian.id_proyek = tbl_proyek.id_proyek join tbl_data_laporan_harian on tbl_laporan_harian.id_laporan_harian = tbl_data_laporan_harian.id_laporan_harian JOIN tbl_keterangan on tbl_data_laporan_harian.id_keterangan = tbl_keterangan.id_keterangan JOIN tbl_keterangan_status on tbl_data_laporan_harian.id_keterangan_status = tbl_keterangan_status.id_keterangan_status WHERE tbl_laporan_harian.id_laporan_harian = "' . $id_laporan_harian . '"');
         if ($result->result_array()) {
             $this->returnJson(
                 array(
@@ -70,6 +72,26 @@ class Laporan_harian extends MY_Controller
         }
         return $list;
     }
+
+
+    public function getKeterangan()
+    {
+        $result = $this->db->query('select * from tbl_keterangan');
+        if ($result) {
+            $list = $result->result();
+        }
+        return $list;
+    }
+
+    public function getStatusBayar()
+    {
+        $result = $this->db->query('select * from tbl_keterangan_status');
+        if ($result) {
+            $list = $result->result();
+        }
+        return $list;
+    }
+
 
 
     public function ajaxInsert()
@@ -110,7 +132,9 @@ class Laporan_harian extends MY_Controller
             'qyt' => $this->input->post("insert_qyt"),
             'satuan' => $this->input->post("insert_satuan"),
             'kredit' => $this->input->post("insert_kredit"),
-            'debit' => $this->input->post("insert_debit")
+            'debit' => $this->input->post("insert_debit"),
+            'id_keterangan' => $this->input->post("insert_id_keterangan"),
+            'id_keterangan_status' => $this->input->post("insert_id_status_bayar")
         );
         $table = 'tbl_data_laporan_harian';
         $insert = $this->BaseModel->insertData($table, $dataInsert);
@@ -139,7 +163,7 @@ class Laporan_harian extends MY_Controller
 
         $id_laporan_harian = $this->input->post('id');
         $result = $this->db->query('delete tbl_laporan_harian, tbl_data_laporan_harian from tbl_laporan_harian INNER JOIN tbl_data_laporan_harian 
-        where  tbl_laporan_harian.id_laporan_harian = tbl_data_laporan_harian.id_laporan_harian and tbl_laporan_harian.id_laporan_harian = "' . $id_laporan_harian . '" ');
+        where tbl_laporan_harian.id_laporan_harian = tbl_data_laporan_harian.id_laporan_harian and tbl_laporan_harian.id_laporan_harian = "' . $id_laporan_harian . '" ');
 
         if (!$result) {
             $this->returnJson(
